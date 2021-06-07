@@ -1,0 +1,31 @@
+﻿<Window x:Class="YO.SelectIntDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YO"
+        mc:Ignorable="d"
+        Title="Select Int Dialog" Height="300" Width="520" FontFamily="/YO;component/../Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Icon="../Resources/img/ico/normal_ni.png" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="Height">
+    <Window.Resources>
+        <Style TargetType="Button"/>
+        <Style TargetType="TextBox"/>
+        <Style TargetType="ComboBox"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.Esc}" Executed="ButtonEsc_Click"/>
+    </Window.CommandBindings>
+    <Grid>
+        <StackPanel Orientation="Vertical" x:Name="mainPanel">
+            <TextBlock FontSize="18" HorizontalAlignment="Left" Margin="20,15,20,0" TextWrapping="Wrap" Text="Название" VerticalAlignment="Top" x:Name="titleTextBox"/>
+            <TextBlock HorizontalAlignment="Left" Margin="20,10,20,0" TextWrapping="Wrap" Text="Описание" VerticalAlignment="Top" x:Name="descriptionTextBox"/>
+            <ComboBox HorizontalAlignment="Left" IsEditable="False" VerticalAlignment="Top" Margin="20,15,0,0" MinWidth="60" Width="Auto" Height="24" x:Name="valueBox"/>
+            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,20" Width="80" Content="ОК" IsDefault="True" x:Name="buttonOK" Click="ButtonOK_Click">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Enter
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,185 @@
+﻿<Window x:Name="mainWindow" x:Class="YO.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:local="clr-namespace:YO"
+        mc:Ignorable="d"
+        Title="YO: Твои Онгоинги" Height="600" Width="1070" MinHeight="235" MinWidth="520" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Closing="Window_Closing" Icon="../Resources/img/ico/normal_ni.png" Closed="Window_Closed" Loaded="MainWindow_Loaded" ShowInTaskbar="True">
+    <Window.Resources>
+        <Style TargetType="Button"/>
+        <Style TargetType="TextBox"/>
+        <Style TargetType="Menu"/>
+        <Style TargetType="Separator"/>
+        <Style TargetType="MenuItem"/>
+        <Style TargetType="ComboBox"/>
+        <Style TargetType="ScrollBar"/>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:Commands.F5}" Executed="RefreshBarItem_Click"/>
+        <CommandBinding Command="{x:Static local:Commands.Esc}" Executed="SignInButtonEsc_Click"/>
+        <CommandBinding Command="{x:Static local:Commands.CtrlO}" Executed="ShikiBarItem_Click"/>
+        <CommandBinding Command="{x:Static local:Commands.CtrlM}" Executed="ViewBarItem_Click"/>
+        <CommandBinding Command="{x:Static local:Commands.CtrlQ}" Executed="ExitBarItem_Click"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid x:Name="mainGrid">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="14">
+                    <MenuItem Header="_Файл">
+                        <MenuItem Header="_Обновить" Click="RefreshBarItem_Click" InputGestureText="F5"/>
+                        <MenuItem Header="_Открыть Шикимори..." Click="ShikiBarItem_Click" InputGestureText="Ctrl+O"/>
+                        <Separator/>
+                        <MenuItem Header="_Выйти" Click="ExitBarItem_Click" InputGestureText="Ctrl+Q"/>
+                    </MenuItem>
+                    <MenuItem Header="_Вид">
+                        <MenuItem Header="_Режим списка" Click="ViewBarItem_Click" InputGestureText="Ctrl+M" x:Name="viewBarItem"/>
+                        <Separator/>
+                        <MenuItem Header="_Сортировка по">
+                            <MenuItem Header="_Оценке" IsCheckable="True" Click="ScoreSortBarItem_Click" x:Name="scoreSortBarItem"/>
+                            <MenuItem Header="_Году" IsCheckable="True" Click="YearSortBarItem_Click" x:Name="yearSortBarItem"/>
+                            <MenuItem Header="_Прогрессу" IsCheckable="True" Click="ProgressSortBarItem_Click" x:Name="progressSortBarItem"/>
+                            <MenuItem Header="_Алфавиту" IsCheckable="True" Click="AlphabetSortBarItem_Click" x:Name="alphabetSortBarItem"/>
+                        </MenuItem>
+                        <MenuItem Header="_Расписание с текущего дня" Click="WeekStartBarItem_Click" IsCheckable="True" x:Name="weekStartBarItem"/>
+                        <Separator/>
+                        <MenuItem Header="_Темная тема" Click="DarkBarItem_Click" IsCheckable="True" x:Name="darkBarItem"/>
+                    </MenuItem>
+                    <MenuItem Header="_Действия">
+                        <MenuItem Header="_Исключить просроченные..." Click="ExcludeBarItem_Click"/>
+                        <MenuItem Header="_Сбросить просроченные..." Click="ResetBarItem_Click"/>
+                        <MenuItem Header="_Перестроить расписание" Click="RescheduleBarItem_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="_Настройки">
+                        <MenuItem Header="_Запускать вместе с Windows" Click="StartupBarItem_Click" IsCheckable="True" x:Name="startupBarItem" />
+                        <MenuItem Header="_Названия на ромадзи" Click="LanguageBarItem_Click" IsCheckable="True" x:Name="languageBarItem" />
+                        <MenuItem Header="_Задержка онгоингов..." Click="DelayBarItem_Click"/>
+                        <Separator/>
+                        <MenuItem Header="_Сменить аккаунт..." Click="SignOutBarItem_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="_Справка">
+                        <MenuItem Header="_Помощь..." Click="HelpBarItem_Click"/>
+                        <MenuItem Header="_О программе..." Click="AboutBarItem_Click"/>
+                        <MenuItem Header="Правообладателям..." Click="CopyrightBarItem_Click"/>
+                    </MenuItem>
+                </Menu>
+                <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="mainScrollView">
+                        <StackPanel x:Name="calendarPanel"/>
+                    </ScrollViewer>
+                    <Grid x:Name="listView" Visibility="Hidden">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel Orientation="Vertical">
+                                <Grid Height="{Binding ElementName=listTopBar,Path=ActualHeight}"/>
+                                <StackPanel x:Name="listPanel" Orientation="Vertical" VerticalAlignment="Top" Margin="20,0,20,0"/>
+                                <Grid x:Name="listPlaceholder"/>
+                                <Border BorderThickness="0,1,0,0" BorderBrush="Gray" Margin="20,0,20,15" HorizontalAlignment="Left" Width="{Binding ElementName=listTitleBar,Path=ActualWidth}">
+                                    <WrapPanel x:Name="statsGrid" Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                                        <TextBlock Height="24" Text="Всего тайтлов: " HorizontalAlignment="Left" x:Name="totalEntriesTextBlock"/>
+                                        <TextBlock Width="30" Height="24" Foreground="Gray" Text="/" TextAlignment="Center"/>
+                                        <TextBlock Height="24" Text="Включено в расписание: " HorizontalAlignment="Left" x:Name="includedEntriesTextBlock"/>
+                                        <TextBlock Width="30" Height="24" Foreground="Gray" Text="/" TextAlignment="Center"/>
+                                        <TextBlock Height="24" Text="Онгоингов: " HorizontalAlignment="Left" x:Name="ongoingsEntriesTextBlock"/>
+                                        <TextBlock Width="30" Height="24" Foreground="Gray" Text="/" TextAlignment="Center"/>
+                                        <TextBlock Height="24" Text="Просмотрено эпизодов за все время: " HorizontalAlignment="Left" x:Name="totalEpisodesTextBlock"/>
+                                    </WrapPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <StackPanel Orientation="Vertical" x:Name="listTopBar" Background="White" VerticalAlignment="Top">
+                            <TextBox Height="24" Margin="20,15,20,0" Text="Поиск..." Foreground="#FFDFDFDF" x:Name="searchTextBox" GotFocus="SearchTextBox_GotFocus" LostFocus="SearchTextBox_LostFocus" TextChanged="SearchTextBox_TextChanged"/>
+                            <Border BorderThickness="0,0,0,1" Margin="20,10,20,0" BorderBrush="Gray">
+                                <Grid x:Name="listTitleBar">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="80"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Height="24" Text="Вкл" HorizontalAlignment="Center" Foreground="RoyalBlue" Cursor="Hand" x:Name="buttonSelectAll" MouseUp="SelectAllButton_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Исключить все
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="1" Height="24" Text="Название" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="RoyalBlue" Cursor="Hand" x:Name="buttonSortTitle" MouseUp="AlphabetSortBarItem_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Сортировать по алфавиту
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="2" Height="24" Text="Оценка" HorizontalAlignment="Center" Foreground="RoyalBlue" Cursor="Hand" x:Name="buttonSortScore" MouseUp="ScoreSortBarItem_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Сортировать по оценке
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="3" Height="24" Text="Прогресс" HorizontalAlignment="Center" Foreground="RoyalBlue" Cursor="Hand" x:Name="buttonSortProgress" MouseUp="ProgressSortBarItem_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Сортировать по прогрессу
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="4" Height="24" Text="Год" HorizontalAlignment="Center" Foreground="RoyalBlue" Cursor="Hand" x:Name="buttonSortYear" MouseUp="YearSortBarItem_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Сортировать по году
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock Grid.Column="5" Height="24" Text="Период" HorizontalAlignment="Center">
+                                        <TextBlock.ToolTip>
+                                            <ToolTip>
+                                                Период выхода новых серий
+                                            </ToolTip>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </DockPanel>
+        </Grid>
+        <Grid x:Name="signInGrid" Visibility="Collapsed">
+            <TextBlock HorizontalAlignment="Left" Margin="15,28,0,0" VerticalAlignment="Top" Text="Your Personal Ongoings" FontSize="20" FontWeight="Bold"/>
+            <TextBlock HorizontalAlignment="Left" Margin="256,24,0,0" VerticalAlignment="Top" Text="x" FontSize="26" FontWeight="Bold"/>
+            <Image HorizontalAlignment="Left" Height="22" Margin="285,31,0,0" VerticalAlignment="Top" Width="189" Source="../Resources/img/shiki_logo.png" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" x:Name="imageLogo" />
+            <TextBlock Text="Пожалуйста, введите имя вашего аккаунта на Шикимори:" HorizontalAlignment="Left" Margin="14,76,0,0" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Margin="16,117,0,0" Width="365" Height="24" TextWrapping="Wrap" Text="Наберите имя здесь..." AcceptsReturn="False" VerticalAlignment="Top" Foreground="#FFDFDFDF" x:Name="nameTextBox" GotFocus="NameTextBox_GotFocus" LostFocus="NameTextBox_LostFocus"/>
+            <ComboBox Margin="14,117,0,0" Width="366" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="accountsBox" SelectionChanged="AccountsBox_SelectionChanged"/>
+            <Button Content="ОК" IsDefault="True" HorizontalAlignment="Left" Height="24" Margin="386,117,0,0" VerticalAlignment="Top" Width="82" x:Name="signInButtonOK" Click="SignInButtonOK_Click">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Enter
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <TextBlock Text="Отмена" TextAlignment="Center" Foreground="RoyalBlue" HorizontalAlignment="Left" Margin="386,145,0,0" VerticalAlignment="Top" Width="82" x:Name="signInButtonEsc" MouseUp="SignInButtonEsc_Click" MouseEnter="LinkButton_MouseEnter" MouseLeave="LinkButton_MouseLeave" Cursor="Hand">
+                <TextBlock.ToolTip>
+                    <ToolTip>
+                        Esc
+                    </ToolTip>
+                </TextBlock.ToolTip>
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="syncGrid" Visibility="Collapsed">
+            <Image Width="160" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,30,30,30" Source="../Resources/img/sakuga_logo.png" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
+            <TextBlock TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Foreground="Black" FontSize="20">
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="5" Color="White" Direction="0" ShadowDepth="0"/>
+                </TextBlock.Effect>
+                Пожалуйста, подождите, идет синхронизация...
+                <LineBreak/>
+                Это может занять несколько минут.
+            </TextBlock>
+        </Grid>
+    </Grid>
+</Window>
