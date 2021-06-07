@@ -2324,7 +2324,7 @@ namespace YO {
     }
 
     /// <summary>
-    /// Class to store anime posters with loaded flag to deal with sudden deletion of poster image file on disk.
+    /// Stores anime posters with loaded flag to deal with sudden deletion of poster image file on disk.
     /// </summary>
     class Poster {
         BitmapSource source;
