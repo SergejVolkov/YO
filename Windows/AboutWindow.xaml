@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YO"
         mc:Ignorable="d"
-        Title="Title" Width="800" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Icon="../Resources/img/ico/normal_ni.png" ShowInTaskbar="True" ResizeMode="NoResize" SizeToContent="Height" x:Name="aboutWindow">
+        Title="Title" Width="800" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Icon="../Resources/img/ico/normal_ni.ico" ShowInTaskbar="True" ResizeMode="NoResize" SizeToContent="Height" x:Name="aboutWindow">
     <Window.Resources>
         <Style TargetType="TextBox"/>
         <Style TargetType="ScrollBar"/>

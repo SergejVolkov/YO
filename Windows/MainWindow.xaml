@@ -6,7 +6,7 @@
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:local="clr-namespace:YO"
         mc:Ignorable="d"
-        Title="YO: Твои Онгоинги" Height="600" Width="1070" MinHeight="235" MinWidth="520" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Closing="Window_Closing" Icon="../Resources/img/ico/normal_ni.png" Closed="Window_Closed" Loaded="MainWindow_Loaded" ShowInTaskbar="True">
+        Title="YO: Твои Онгоинги" Height="600" Width="1070" MinHeight="235" MinWidth="520" FontFamily="/YO;component/Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Closing="Window_Closing" Icon="../Resources/img/ico/normal_ni.ico" Closed="Window_Closed" Loaded="MainWindow_Loaded" ShowInTaskbar="True">
     <Window.Resources>
         <Style TargetType="Button"/>
         <Style TargetType="TextBox"/>
