@@ -1870,6 +1870,7 @@ namespace YO {
 
             string htmlCode;
             var client = new WebClient();
+            client.Encoding = System.Text.Encoding.UTF8;
             try {
                 htmlCode = client.DownloadString(watching_url);
             } catch {
@@ -2240,6 +2241,9 @@ namespace YO {
         bool CheckInstance() {
             if (File.Exists(tmpdir + "running") && IsFileLocked(new FileInfo(tmpdir + "running"))) {
                 return true;
+            }
+            if (!Directory.Exists(tmpdir)) {
+                Directory.CreateDirectory(tmpdir);
             }
             instance_stream = File.Open(tmpdir + "running", FileMode.Create);
             return false;
