@@ -127,10 +127,37 @@ namespace YO.Modules {
     /// </summary>
     public class TagReader : IDisposable
     {
-        private TagStreamReader reader;
+        static string[] html_single_tags = {
+            "br",
+            "hr",
+            "img",
+            "meta",
+            "input",
+            "doctype"
+        };
 
-        public TagReader(Stream stream) => reader = new TagStreamReader(stream);
-        public TagReader(string path) => reader = new TagStreamReader(path);
+        private TagStreamReader reader;
+        bool html_mode = false;
+
+        /// <summary>
+        /// Construct TagReader from file stream.
+        /// </summary>
+        /// <param name="stream">File stream.</param>
+        /// <param name="html_mode">False for default XML behaviour, true for HTML mode.</param>
+        public TagReader(Stream stream, bool html_mode = false) {
+            reader = new TagStreamReader(stream);
+            this.html_mode = html_mode;
+        }
+
+        /// <summary>
+        /// Construct TagReader from file path.
+        /// </summary>
+        /// <param name="path">Path to file.</param>
+        /// <param name="html_mode">False for default XML behaviour, true for HTML mode.</param>
+        public TagReader(string path, bool html_mode = false) {
+            reader = new TagStreamReader(path);
+            this.html_mode = html_mode;
+        }
 
         /// <summary>
         /// Read all XML tags in stream.
@@ -168,10 +195,12 @@ namespace YO.Modules {
                     }
                     if (word == "")
                     {
-                        if (separator == '>') tag.Content.AddRange(Read(tag));
-                        else if ((separator == '?' || separator == '/') && ((word = reader.ReadWord(out separator)) != "" || separator != '>'))
+                        if (separator == '>' && !(html_mode && html_single_tags.Contains(tag.Name))) {
+                            tag.Content.AddRange(Read(tag));
+                        } else if ((separator == '?' || separator == '/') && ((word = reader.ReadWord(out separator)) != "" || separator != '>')) {
                             throw new TagReaderException("Unclosed tag!", reader.Line, parent.Name, word, separator, tag,
                                 "Tag with no content should be finished with \"/>\" construction");
+                        }
                     }
                     else throw new TagReaderException("Some weird symbols!", reader.Line, parent.Name, word, separator, tag,
                         "Tag properties should be separated with space");
@@ -179,7 +208,9 @@ namespace YO.Modules {
                 else if (separator == '>' && word != "")
                 {
                     tag.Name = word;
-                    tag.Content.AddRange(Read(tag));
+                    if (!(html_mode && html_single_tags.Contains(tag.Name))) {
+                        tag.Content.AddRange(Read(tag));
+                    }
                 }
                 else if (separator == '?' || separator == '/')
                 {
