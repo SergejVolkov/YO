@@ -148,6 +148,34 @@ namespace YO.Modules {
         }
 
         /// <summary>
+        /// Optimize periods for new entries.
+        /// </summary>
+        public void AssignPeriods() {
+            var new_entries = Data.Values.Where(p => p.Mode == EntryMode.AddNew);
+            List<int> empty_slots = new List<int>();
+            int current_day = Convert.ToInt32(DateTime.Now.DayOfWeek);
+            for (int i = current_day; i < 7 + current_day; ++i) {
+                if (Stats[i % 7] == 0) {
+                    empty_slots.Add(i);
+                }
+            }
+            int diff = empty_slots.Count - new_entries.Count();
+            if (diff > 0) {
+                if (empty_slots.Count == 7) {
+                    foreach (var entry in new_entries) {
+                        entry.Period = new_entries.Count();
+                    }
+                } else if (new_entries.Count() >= diff) {
+                    for (int i = 0; i < diff; ++i) {
+                        new_entries.ElementAt(i).Period = empty_slots[empty_slots.Count - diff + i] - empty_slots[i];
+                    }
+                } else {
+                    // Don't know how to handle this, leaving everything as is may be the best solution
+                }
+            }
+        }
+
+        /// <summary>
         /// Calculate episodes per day statistics.
         /// </summary>
         private void RecalcStats() {
