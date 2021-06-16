@@ -186,7 +186,9 @@ namespace YO {
                 reader.Dispose();
                 if (cache.Name.ToLower() != key) throw new OperationCanceledException();
                 return cache;
-            } catch { throw new CacheFileCorruptedException(key); }
+            } catch {
+                throw new CacheFileCorruptedException(key);
+            }
         }
 
         /// <summary>
@@ -845,12 +847,13 @@ namespace YO {
         private void SignInButtonOK_Click(object sender, RoutedEventArgs e) {
             if (mode == Mode.SignIn && nameTextBox.Text != "") {
                 using (var client = new WebClient()) {
+                    client.Encoding = System.Text.Encoding.UTF8;
                     if (!CheckForInternetConnection(5000)) {
                         System.Windows.Forms.MessageBox.Show("Вы оффлайн! Чтобы продолжить,\nпожалуйста, подключитесь к интернету...");
                         return;
                     }
                     try {
-                        client.DownloadString(shiki_url + nameTextBox.Text + watching_part_url);
+                        client.DownloadString(shiki_url + WebUtility.UrlEncode(nameTextBox.Text) + watching_part_url);
                     } catch {
                         System.Windows.Forms.MessageBox.Show("Неверное имя пользователя или закрытый список!\nПожалуйста, укажите имя существующего аккаунта с открытым списком...");
                         return;
@@ -910,6 +913,10 @@ namespace YO {
                 this.Show();
                 this.ShowInTaskbar = true;
                 ScrollToCurrent();
+            } else if (this.WindowState == WindowState.Minimized) {
+                this.WindowState = WindowState.Normal;
+            } else {
+                this.Activate();
             }
         }
 
@@ -993,9 +1000,11 @@ namespace YO {
         }
 
         private void Window_Closed(object sender, EventArgs e) {
-            ni.Visible = false;
-            ni.Dispose();
-            UpdateCache();
+            if (ni != null) {
+                ni.Visible = false;
+                ni.Dispose();
+                UpdateCache();
+            }
             instance_stream.Close();
             instance_stream.Dispose();
         }
@@ -1851,7 +1860,7 @@ namespace YO {
             int length = htmlCode.IndexOf("<div class=\"b-db_entry\">");
             File.WriteAllText(appdata + "tmp\\watching.html", htmlCode.Substring(0, length));
             List<Tag> html_code;
-            using (var reader = new TagReader(appdata + "tmp\\watching.html")) {
+            using (var reader = new TagReader(appdata + "tmp\\watching.html", true)) {
                 html_code = reader.Read();
             }
             try {
@@ -1882,7 +1891,7 @@ namespace YO {
             if (start < 0) return changes_made;
             File.WriteAllText(appdata + "tmp\\watching.html", htmlCode.Substring(start, length));
             Tag html_code;
-            using (var reader = new TagReader(appdata + "tmp\\watching.html")) {
+            using (var reader = new TagReader(appdata + "tmp\\watching.html", true)) {
                 html_code = reader.Read()[0];
             }
             bool offline = false;
@@ -1995,6 +2004,7 @@ namespace YO {
                 scheduler.MarkRemove(key);
             }
             if (changes_made) {
+                scheduler.AssignPeriods();
                 scheduler.Schedule();
                 UpdateDataCache();
             }
@@ -2192,7 +2202,7 @@ namespace YO {
         }
 
         void UpdateWatchingUrl() {
-            watching_url = shiki_url + account_name + watching_part_url;
+            watching_url = shiki_url + WebUtility.UrlEncode(account_name) + watching_part_url;
         }
 
         void OpenShiki() {
