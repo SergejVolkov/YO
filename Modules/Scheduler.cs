@@ -430,7 +430,10 @@ namespace YO.Modules {
         /// <param name="satisfied">Watched episodes today flag.</param>
         public void Update(DateTime new_added, bool satisfied = false) {
             mode = EntryMode.Default;
-            added_date = new_added.AddHours(-new_added.Hour).AddMinutes(-new_added.Minute).AddSeconds(-new_added.Second).AddMilliseconds(-new_added.Millisecond);
+            added_date = new_added.AddHours(-new_added.Hour)
+                                  .AddMinutes(-new_added.Minute)
+                                  .AddSeconds(-new_added.Second)
+                                  .AddMilliseconds(-new_added.Millisecond);
             added_episodes = watched_episodes - (satisfied && DateTime.Now.DayOfYear == added_date.DayOfYear && DateTime.Now.Year == added_date.Year ? episodes_per_day : 0);
         }
 
