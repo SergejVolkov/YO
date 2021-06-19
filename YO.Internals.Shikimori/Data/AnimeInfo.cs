@@ -5,6 +5,9 @@ namespace YO.Internals.Shikimori.Data
 {
 	public class AnimeInfo : BaseObject
 	{
+		[JsonProperty("name")]
+		public string Name { get; set; }
+		
 		[JsonProperty("status")]
 		public AnimeStatus Status { get; set; }
 		

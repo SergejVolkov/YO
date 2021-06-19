@@ -7,7 +7,6 @@ namespace YO.Internals.Shikimori.Categories.Abstractions
 {
 	public interface IUserRates
 	{
-		Task<UserRate> Get(long id);
-		Task<IReadOnlyCollection<UserRate>> GetUserRates(GetUserRatesParameters parameters);
+		Task<IReadOnlyCollection<UserRate>?> GetUserRates(GetUserRatesParameters parameters);
 	}
 }

@@ -6,38 +6,38 @@ namespace YO.Internals.Shikimori.Parameters
 	{
 		public long? UserId
 		{
-			get => GetParameter<long?>("user_id");
-			set => SetParameter("user_id", value);
+			get => (long?) base["user_id"];
+			set => base["user_id"] = value;
 		}
 		
 		public long? TargetId
 		{
-			get => GetParameter<long?>("target_id");
-			set => SetParameter("target_id", value);
+			get => (long?) base["target_id"];
+			set => base["target_id"] = value;
 		}
 		
 		public DataType? TargetType
 		{
-			get => GetParameter<DataType>("target_type");
-			set => SetParameter("target_type", value);
+			get => (DataType?) base["target_type"];
+			set => base["target_type"] = value;
 		}
 		
 		public RateStatus? Status
 		{
-			get => GetParameter<RateStatus?>("status");
-			set => SetParameter("status", value);
+			get => (RateStatus?) base["status"];
+			set => base["status"] = value;
 		}
 		
 		public int? Page
 		{
-			get => GetParameter<int?>("page");
-			set => SetParameter("page", value);
+			get => (int?) base["page"];
+			set => base["page"] = value;
 		}
 		
 		public int? Limit
 		{
-			get => GetParameter<int?>("limit");
-			set => SetParameter("limit", value);
+			get => (int?) base["limit"];
+			set => base["limit"] = value;
 		}
 	}
 }

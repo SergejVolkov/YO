@@ -1,56 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace YO.Internals.Shikimori.Parameters
 {
 	public abstract class ParametersBase
 	{
-		private readonly IDictionary<string, object> _parameters;
+		private readonly Dictionary<string, object?> _parameters = new();
 
-		protected ParametersBase()
+		public object? this[string parameter]
 		{
-			_parameters = new Dictionary<string, object>();
+			get => _parameters[parameter];
+			set => _parameters[parameter] = value;
 		}
 
-		protected T GetParameter<T>(string parameterName)
+		internal static ParametersBase Empty => new GetUserRatesParameters();
+		
+		internal Uri BuildQuery(string baseUrl)
 		{
-			try
-			{
-				return (T) _parameters[parameterName];
-			} catch (KeyNotFoundException) when (default(T) is null)
-			{
-				return default;
-			}
-		}
-
-		protected void SetParameter(string parameterName, object value)
-		{
-			if (value != null)
-			{
-				_parameters[parameterName] = value;
-			} else
-			{
-				_parameters.Remove(parameterName);
-			}
-		}
-
-		internal string BuildQuery()
-		{
-			var stringBuilder = new StringBuilder();
+			var stringBuilder = new StringBuilder(baseUrl);
 			var first = true;
-			var appendFormat = "&{0}={1}";
+			var appendFormat = "?{0}={1}";
 			foreach (var (name, value) in _parameters)
 			{
+				stringBuilder.AppendFormat(appendFormat, name, value);
+				
 				if (first)
 				{
-					appendFormat = "?{0}={1}";
+					appendFormat = "&{0}={1}";
 					first = false;
 				}
-				
-				stringBuilder.AppendFormat(appendFormat, name, value);
 			}
 
-			return stringBuilder.ToString();
+			return new Uri(stringBuilder.ToString());
 		}
 	}
 }
