@@ -10,26 +10,18 @@ namespace YO.Internals.Tests
 	[TestFixture]
 	public class ShikimoriTest
 	{
-		private IShikimoriApi _shikimoriApi;
-
-		[SetUp]
-		public void SetUp()
-		{
-			_shikimoriApi = new ShikimoriApi(new HttpClient());
-		}
-
 		[TestCase(367866, "SergejVolkov")]
 		[TestCase(135003, "HencoDesu")]
 		public async Task GetUserTest(int userId, string userNickname)
 		{
-			var user = await _shikimoriApi.Users.GetById(userId);
+			var client = GetApiClient();
 			
+			var user = await client.Users.GetById(userId);
 			Assert.NotNull(user);
 			Assert.AreEqual(userId, user.Id);
 			Assert.AreEqual(userNickname, user.Nickname);
 
-			user = await _shikimoriApi.Users.GetById(userId);
-			
+			user = await client.Users.GetById(userId);
 			Assert.NotNull(user);
 			Assert.AreEqual(userId, user.Id);
 			Assert.AreEqual(userNickname, user.Nickname);
@@ -39,7 +31,8 @@ namespace YO.Internals.Tests
 		[TestCase(21, "One Piece", false)]
 		public async Task GetAnimeTest(int animeId, string animeName, bool isReleased)
 		{
-			var anime = await _shikimoriApi.Animes.GetAnime(animeId);
+			var client = GetApiClient();
+			var anime = await client.Animes.GetAnime(animeId);
 			var expectedStatus = isReleased ? AnimeStatus.Released : AnimeStatus.Ongoing;
 
 			Assert.NotNull(anime);
@@ -55,17 +48,21 @@ namespace YO.Internals.Tests
 		[TestCase(135003, 39535)]
 		public async Task GetUserRateTest(int userId, int animeId)
 		{
+			var client = GetApiClient();
 			var requestParameters = new GetUserRatesParameters()
 			{
 				UserId = userId,
 				TargetType = DataType.Anime,
 				TargetId = animeId
 			};
-			var userRates = await _shikimoriApi.UserRates.GetUserRates(requestParameters);
+			var userRates = await client.UserRates.GetUserRates(requestParameters);
 			
 			Assert.NotNull(userRates);
 			Assert.IsNotEmpty(userRates);
 			Assert.AreEqual(1, userRates.Count);
 		}
+		
+		private static IShikimoriApi GetApiClient() 
+			=> new ShikimoriApi(new HttpClient());
 	}
 }

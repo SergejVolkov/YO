@@ -79,13 +79,14 @@ namespace YO.Internals.Schedule
 			// TODO: Implement released anime schedule
 			if (anime.Status == AnimeStatus.Ongoing)
 			{
-				var nextEpisodeDay = anime.NextEpisodeTime!.Value.Date;
 				var startingEpisode = userRate.Episodes + 1;
 				var totalEpisodes = anime.Episodes;
-				var dayOffset = _configuration.DelayForNewSeries;
+				var nextEpisodeDay = anime.NextEpisodeTime!.Value.Date;
+				var daysUntilNextEpisode = (nextEpisodeDay - DateTime.Today).TotalDays;
+				var dayOffset = daysUntilNextEpisode + _configuration.DelayForNewSeries;
 
 				for (var episode = startingEpisode;
-					episode < totalEpisodes && dayOffset <= _configuration.DaysLimit;
+					episode < totalEpisodes && dayOffset < _configuration.DaysLimit;
 					episode++, dayOffset += 7)
 				{
 					_entries.Add(new ScheduledEpisode(nextEpisodeDay.AddDays(dayOffset), episode));
