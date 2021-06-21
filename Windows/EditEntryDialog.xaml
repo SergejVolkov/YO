@@ -1,9 +1,10 @@
-﻿<Window x:Class="YO.EditEntryDialog"
+﻿<Window x:Class="YO.Windows.EditEntryDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:YO"
+        xmlns:windows="clr-namespace:YO.Windows"
         mc:Ignorable="d"
         Title="Edit Entry Dialog" Height="400" Width="620" FontFamily="/YO;component/../Resources/fonts/#Exo 2" FontSize="16" WindowState="Normal" Icon="../Resources/img/ico/normal_ni.ico" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="Height">
     <Window.Resources>
@@ -12,7 +13,7 @@
         <Style TargetType="ComboBox"/>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static local:Commands.Esc}" Executed="ButtonEsc_Click"/>
+        <CommandBinding Command="{x:Static windows:Commands.Esc}" Executed="ButtonEsc_Click"/>
     </Window.CommandBindings>
     <Grid>
         <StackPanel x:Name="mainPanel" Orientation="Horizontal">
