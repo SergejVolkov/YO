@@ -151,7 +151,7 @@ namespace YO.Modules {
         /// Optimize periods for new entries.
         /// </summary>
         public void AssignPeriods() {
-            var new_entries = Data.Values.Where(p => p.Mode == EntryMode.AddNew);
+            var new_entries = Data.Values.Where(p => p.Mode == EntryMode.AddNew && p.WeekDay == WNotScheduled);
             List<int> empty_slots = new List<int>();
             int current_day = Convert.ToInt32(DateTime.Now.DayOfWeek);
             for (int i = current_day; i < 7 + current_day; ++i) {

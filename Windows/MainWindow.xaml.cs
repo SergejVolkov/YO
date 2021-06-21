@@ -1845,7 +1845,7 @@ namespace YO.Windows {
         /// <summary>
         /// Heart of the app, syncs shikimori anime list and scheduler. Do not call this method directly, use RefreshAsync so the app won't freeze.
         /// </summary>
-        /// <returns>Flag indicating whether any changes has been made.</returns>
+        /// <returns>Flag indicating whether any changes has been made to scheduler's data.</returns>
         bool Refresh() {
             bool changes_made = false;
 
@@ -1935,11 +1935,13 @@ namespace YO.Windows {
                     entry.RussianName = russian_name;
                     if (!full_refreshed) {
                         AnimeStatus status = entry.Status;
+                        bool to_reschedule = false;
                         if (is_ongoing) {
                             if (week_day < 0) {
                                 status = AnimeStatus.PendingOngoing;
-                                if (entry.Status == AnimeStatus.RegularOngoing)
-                                    scheduler.MarkReschedule(id);
+                                if (entry.Status == AnimeStatus.RegularOngoing) {
+                                    to_reschedule = true;
+                                }
                             } else if (!(status == AnimeStatus.PendingOngoing && entry.OverrideRegularOngoing)) {
                                 status = AnimeStatus.RegularOngoing;
                                 changes_made |= entry.WeekDay != week_day;
@@ -1947,11 +1949,18 @@ namespace YO.Windows {
                             }
                         } else {
                             status = AnimeStatus.Released;
-                            if (entry.Status == AnimeStatus.RegularOngoing)
-                                scheduler.MarkReschedule(id);
+                            if (entry.Status == AnimeStatus.RegularOngoing) {
+                                to_reschedule = true;
+                            } else if (entry.Status == AnimeStatus.PendingOngoing && entry.OverrideRegularOngoing) {
+                                changes_made = true;
+                                entry.OverrideRegularOngoing = false;
+                            }
                         }
                         changes_made |= entry.Status != status;
                         entry.Status = status;
+                        if (to_reschedule) {
+                            scheduler.MarkReschedule(id);
+                        }
                     }
                 } else {
                     changes_made = true;
