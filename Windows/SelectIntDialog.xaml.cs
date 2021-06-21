@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace YO {
+namespace YO.Windows {
     /// <summary>
     /// Interaction logic for SelectIntDialog.xaml
     /// </summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,38 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using System.Reflection;
 using YO.Modules;
 
-namespace YO {
-    /// <summary>
-    /// Basic app states.
-    /// </summary>
-    enum Mode {
-        Normal,
-        SignIn,
-        Refresh,
-        Offline
-    };
-
-    /// <summary>
-    /// Language of anime titles.
-    /// </summary>
-    public enum TitleLanguage {
-        Russian,
-        Romaji
-    };
-
-    /// <summary>
-    /// Sorting of animes in calendar slots and list.
-    /// </summary>
-    enum SortingMode {
-        Score,
-        Year,
-        Progress,
-        Alphabet
-    }
-
+namespace YO.Windows {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -2344,88 +2316,5 @@ namespace YO {
                 null, data, stride);
         }
         #endregion
-    }
-
-    /// <summary>
-    /// Stores anime posters with loaded flag to deal with sudden deletion of poster image file on disk.
-    /// </summary>
-    class Poster {
-        BitmapSource source;
-        bool is_loaded;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public Poster() {
-            is_loaded = false;
-        }
-
-        /// <summary>
-        /// Construct poster from image and optional flag.
-        /// </summary>
-        /// <param name="source">Poster image.</param>
-        /// <param name="is_loaded">Loaded flag.</param>
-        public Poster(BitmapSource source, bool is_loaded = true) {
-            this.source = source;
-            this.is_loaded = is_loaded;
-        }
-
-        public BitmapSource Source => source;
-        public bool IsLoaded => is_loaded;
-    }
-
-    /// <summary>
-    /// Massive string resources class.
-    /// </summary>
-    public static class StringResources {
-        public static string Help => "С чего начать?\n\nРасписание просмотра серий аниме составляется автоматически, основываясь на Вашем списке \"Смотрю\". Мы принципиально не просим пароль от Вашего аккаунта, поэтому поддерживаются только открытые списки. Изменить видимость списка можно в настройках Шикимори.\n\nИсключить тайтл из расписания и изменить период выхода серий (по умолчанию раз в неделю) можно, нажав на карандашик в правом верхнем углу обложки. Чтобы вернуть исключенное аниме, перейдите в Режим списка (Ctrl+M), там же доступен удобный интерфейс для управления параметрами всех Ваших аниме одновременно. Зеленым цветом подсвечиваются тайтлы, план по которым был выполнен сегодня, желтым — готовые к просмотру сегодня, красным цветом — просроченные. \n\nОдна из ключевых настроек программы — задержка онгоингов. Хотя в Японии новые серии можно посмотреть по телевизору в день выхода, для зарубежных зрителей это не так просто, поэтому по умолчанию установлена однодневная задержка между выходом новой серии и ее положением в расписании. Изменить период выхода и положение в расписании для текущих онгоингов с известными датами выхода серий можно, нажав кнопку \"Догнать\" в окошке редактирования.\n\nВы можете отключить автозапуск программы в настройках, но тогда Вы не будете получать уведомления, пока не запустите ее самостоятельно.\n\n\nЧАВО:\n\nВопрос: После некоторого времени использования программы расписание стало несбалансированным. Что делать?\nОтвет: Для тайтлов, которые стоят в неудобные дни, можно нажать кнопку \"Сброс\" в окне редактирования. Если все совсем плохо, воспользуйтесь \"Действия → Перестроить расписание\". Расписание будет составлено заново, но при этом вы потеряете все данные о текущем графике, включая задолженности!\n\nВопрос: Я посмотрел больше серий, чем нужно по плану, почему приложение не показывает, что я опережаю график?\nОтвет: Планировщик учитывает это, и обновляет прогресс тайтла так, чтобы Вы досмотрели его быстрее. :)\n\nВопрос: Приложение не запускается.\nОтвет: Проверьте значок программы в блоке фоновых приложений на панели задач. Для запуска кликните по нему два раза.\n\nВопрос: Вместо обложки аниме отображается 404-тян, хотя у тайтла есть постер на Шикимори. Как это исправить?\nОтвет: Скорее всего, это произошло из-за обрыва связи при синхронизации. Выйдите из программы (Ctrl+Q) , скопируйте в адресную строку проводника \"%APPDATA%/YO\", оказавшись там, удалите папку \"tmp\". Остальные файлы трогать не стоит, если не хотите потерять свои данные. ;)\n\nВопрос: ЧАВО не помогает, произошла неизвестная ошибка, программа упала, я нашел баг, опечатку.\nОтвет: Это замечательно! Пожалуйста, напишите о Вашей проблеме в топик ошибок, и она будет исправлена.\n\nСообщить об ошибке или предложить идею по улучшению можно в клубе темы (ссылку можно выделить и скопировать):\nhttps://shikimori.one/clubs/3417\n\nРепозиторий с исходным кодом, если Вы хотите поменять программу по своему усмотрению:\nhttps://github.com/SergejVolkov/YO";
-        public static string About => "YO: Твои Онгоинги — это удобный и функциональный планировщик просмотра аниме, синхронизирующийся с Вашим списком на Шикимори. С YO Вы не только можете смотреть релизнутые тайтлы так, как будто они выходят сейчас, но и планировать просмотр текущих онгоингов, догонять их и многое другое!\n\nВыбирайте периодичность выхода серий и их количество, а умный алгоритм составит расписание наиболее эффективным образом. Каждый день приложение будет рассылать уведомления с указанием эпизодов на сегодня. Вы также можете настроить для тайтлов любые ссылки на онлайн-кинотеатры: запланированные серии всего в одном клике от Вас! А если пропустили несколько эпизодов — ничего страшного: просроченные тайтлы можно обнулить или исключить из расписания.\n\nВ приложении доступна темная тема, переключение между различными аккаунтами. Мы не собираем о Вас никакие данные, все хранится только на Вашем компьютере.";
-        public static string Copyright => "YO: Your Ongoings is a strictly non-profit open-source project distributed under GNU GPLv3 (GNU General Public License 3.0). The author does not own any of the drawings and images that are used in this program except the logo icon, however, neither this program nor any of its derivatives shall not gain profit of them, so the inclusion of the aforementioned images can be considered fair use.\n\nIf you hold the rights to any of the images in this program and would like to stop their use, please contact the author.\n\nE-mail: volkovsergej17@gmail.com\nTelegram: @SergejVolkov";
-        public static string Notice => "SergejVolkov, 2021";
-    }
-
-    /// <summary>
-    /// Keyboard shortcuts.
-    /// </summary>
-    public static class Commands {
-        public static RoutedCommand F5 = new RoutedCommand();
-        public static RoutedCommand Esc = new RoutedCommand();
-        public static RoutedCommand CtrlO = new RoutedCommand();
-        public static RoutedCommand CtrlM = new RoutedCommand();
-        public static RoutedCommand CtrlQ = new RoutedCommand();
-
-        /// <summary>
-        /// Initialize shortcut class.
-        /// </summary>
-        public static void Init() {
-            F5.InputGestures.Add(new KeyGesture(Key.F5));
-            Esc.InputGestures.Add(new KeyGesture(Key.Escape));
-            CtrlO.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
-            CtrlM.InputGestures.Add(new KeyGesture(Key.M, ModifierKeys.Control));
-            CtrlQ.InputGestures.Add(new KeyGesture(Key.Q, ModifierKeys.Control));
-        }
-    }
-
-    /// <summary>
-    /// Day of week converter class.
-    /// </summary>
-    public static class Conv {
-        /// <summary>
-        /// Convert Sunday-Saturday format to Monday-Sunday format.
-        /// </summary>
-        /// <param name="international_week_day">Day of week in Sunday-Saturday format.</param>
-        /// <returns>Day of week in Monday-Sunday format.</returns>
-        public static int ToWeekDayRu(int international_week_day) {
-            return (international_week_day - 1 + 7) % 7;
-        }
-
-        /// <summary>
-        /// Convert Sunday-Saturday format to Monday-Sunday format.
-        /// </summary>
-        /// <param name="international_week_day">Day of week in Sunday-Saturday format.</param>
-        /// <returns>Day of week in Monday-Sunday format.</returns>
-        public static int ToWeekDayRu(DayOfWeek international_week_day) {
-            return ToWeekDayRu(Convert.ToInt32(international_week_day));
-        }
     }
 }

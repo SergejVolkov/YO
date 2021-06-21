@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using YO.Modules;
 
-namespace YO {
+namespace YO.Windows {
     /// <summary>
     /// Interaction logic for EditEntryDialog.xaml
     /// </summary>
