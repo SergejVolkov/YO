@@ -58,15 +58,36 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Modules\AnimeStatus.cs" />
+    <Compile Include="Modules\Entry.cs" />
+    <Compile Include="Modules\EntryMode.cs" />
+    <Compile Include="Modules\MinMaxInfo.cs" />
+    <Compile Include="Modules\TagReader.cs" />
+    <Compile Include="Modules\TagReaderException.cs" />
+    <Compile Include="Modules\TagStreamReader.cs" />
+    <Compile Include="Modules\TagStreamReaderException.cs" />
+    <Compile Include="Modules\TagWriter.cs" />
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Commands.cs" />
+    <Compile Include="Windows\MainWindow.Cache.cs" />
+    <Compile Include="Windows\MainWindow.EventHandlers.cs" />
+    <Compile Include="Windows\MainWindow.Logic.cs" />
+    <Compile Include="Windows\MainWindow.Prepare.cs" />
+    <Compile Include="Windows\MainWindow.UI.cs" />
+    <Compile Include="Windows\WeekDayConverter.cs" />
     <Compile Include="Windows\EditEntryDialog.xaml.cs">
       <DependentUpon>EditEntryDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Mode.cs" />
+    <Compile Include="Windows\Poster.cs" />
     <Compile Include="Windows\SelectIntDialog.xaml.cs">
       <DependentUpon>SelectIntDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SortingMode.cs" />
+    <Compile Include="Windows\StringResources.cs" />
+    <Compile Include="Windows\TitleLanguage.cs" />
     <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -94,7 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Modules\Scheduler.cs" />
-    <Compile Include="Modules\Exceptions.cs" />
+    <Compile Include="Modules\CacheFileCorruptedException.cs" />
     <Compile Include="Modules\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
