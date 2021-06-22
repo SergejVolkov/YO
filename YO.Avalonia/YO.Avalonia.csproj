@@ -18,9 +18,9 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\YO.Internals\YO.Internals.csproj" />
+      <AvaloniaResource Include="Assets\Images\shiki_logo.png" />
     </ItemGroup>
     <ItemGroup>
-      <AvaloniaResource Include="Assets\Images\shiki_logo.png" />
+      <ProjectReference Include="..\YO.Internals\YO.Internals.csproj" />
     </ItemGroup>
 </Project>

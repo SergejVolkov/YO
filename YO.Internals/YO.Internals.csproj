@@ -6,9 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="ReactiveUI" Version="14.1.1" />
       <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
+      <ProjectReference Include="..\YO.Internals.Shikimori\YO.Internals.Shikimori.csproj" />
     </ItemGroup>
 
 </Project>
