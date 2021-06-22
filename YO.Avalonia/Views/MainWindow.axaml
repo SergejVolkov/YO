@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="YO.Avalonia.Views.MainWindow"
+        Title="YO: Твои онгоинги">
+
+    <Grid>
+        <Grid RowDefinitions="Auto, Auto, Auto"
+              IsVisible="{Binding !IsAuthorized}"
+              Classes="centered">
+            <TextBlock Text="😢"
+                       Grid.Row="0"
+                       Classes="centered extraLarge"/>
+
+            <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
+                       Grid.Row="1"
+                       Margin="15"
+                       Classes="centered medium" />
+
+            <Button Content="Проверить авторизацию"
+                    Command="{Binding OpenLoginDialog}"
+                    Classes="centered medium"
+                    Grid.Row="2" />
+        </Grid>
+        
+        <Grid RowDefinitions="Auto, Auto, Auto"
+              IsVisible="{Binding IsAuthorized}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <TextBlock Text="🗿"
+                       Grid.Row="0"
+                       Classes="centered extraLarge"/>
+
+            <TextBlock Text="С авторизацией все ок, но списка пока нет"
+                       Grid.Row="1"
+                       Margin="15"
+                       Classes="centered medium"/>
+
+            <Button Content="Сменить аккаунт"
+                    Command="{Binding OpenLoginDialog}"
+                    Classes="centered medium"
+                    Grid.Row="2" />
+        </Grid>
+    </Grid>
+</Window>

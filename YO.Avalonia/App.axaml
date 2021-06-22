@@ -1,0 +1,29 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:YO.Avalonia"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             x:Class="YO.Avalonia.App">
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <FontFamily x:Key="Exo 2">avares://YO.Avalonia/Assets/Fonts/Exo2#Exo2</FontFamily>
+
+            <system:Double x:Key="FontExtraLarge">72</system:Double>
+            <system:Double x:Key="FontLarge">42</system:Double>
+            <system:Double x:Key="FontMedium">22</system:Double>
+            <system:Double x:Key="FontSmall">16</system:Double>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme Mode="Light" />
+        
+        <StyleInclude Source="avares://YO.Avalonia/Assets/Styles/Button.axaml" />
+        <StyleInclude Source="avares://YO.Avalonia/Assets/Styles/Grid.axaml" />
+        <StyleInclude Source="avares://YO.Avalonia/Assets/Styles/TextBlock.axaml" />
+        <StyleInclude Source="avares://YO.Avalonia/Assets/Styles/TextBox.axaml" />
+    </Application.Styles>
+</Application>

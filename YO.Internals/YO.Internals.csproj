@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="ReactiveUI" Version="14.1.1" />
+      <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
+    </ItemGroup>
+
+</Project>
