@@ -5,18 +5,28 @@ namespace YO.Modules
 	/// <summary>
 	/// Helper struct for storing schedule and stats params.
 	/// </summary>
-	struct MinMaxInfo {
-		private int contains_min, contains_max;
-		DateTime added_date;
-
-		public MinMaxInfo(int contains_min, int contains_max, DateTime added_date) {
-			this.contains_min = contains_min;
-			this.contains_max = contains_max;
-			this.added_date = added_date;
+	internal readonly struct MinMaxInfo : IComparable<MinMaxInfo>
+	{
+		public MinMaxInfo(int containsMin, int containsMax, DateTime addedDate)
+		{
+			ContainsMin = containsMin;
+			ContainsMax = containsMax;
+			AddedDate = addedDate;
 		}
 
-		public int ContainsMin => contains_min;
-		public int ContainsMax => contains_max;
-		public DateTime AddedDate => added_date;
+		public int ContainsMin { get; }
+
+		public int ContainsMax { get; }
+
+		public DateTime AddedDate { get; }
+
+		public int CompareTo(MinMaxInfo other)
+		{
+			var containsMaxComparison = ContainsMax.CompareTo(other.ContainsMax);
+			
+			return containsMaxComparison != 0 
+				? containsMaxComparison 
+				: ContainsMin.CompareTo(other.ContainsMin);
+		}
 	}
 }

@@ -6,11 +6,11 @@ namespace YO.Windows
 	/// Keyboard shortcuts.
 	/// </summary>
 	public static class Commands {
-		public static RoutedCommand F5 = new RoutedCommand();
-		public static RoutedCommand Esc = new RoutedCommand();
-		public static RoutedCommand CtrlO = new RoutedCommand();
-		public static RoutedCommand CtrlM = new RoutedCommand();
-		public static RoutedCommand CtrlQ = new RoutedCommand();
+		public static readonly RoutedCommand F5 = new RoutedCommand();
+		public static readonly RoutedCommand Esc = new RoutedCommand();
+		public static readonly RoutedCommand CtrlO = new RoutedCommand();
+		public static readonly RoutedCommand CtrlM = new RoutedCommand();
+		public static readonly RoutedCommand CtrlQ = new RoutedCommand();
 
 		/// <summary>
 		/// Initialize shortcut class.
