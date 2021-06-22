@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using YO.Internals.Configuration;
@@ -21,7 +20,6 @@ namespace YO.Internals.ViewModels
 	{
 		private readonly IConfiguration _configuration;
 		private readonly IShikimoriApi _shikimoriApi;
-		private readonly HttpClient _httpClient;
 
 		public Interaction<LoginViewModel, string> ShowLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> OpenLoginDialog { get; }
@@ -41,7 +39,6 @@ namespace YO.Internals.ViewModels
 		{
 			_configuration = configuration;
 			_shikimoriApi = shikimoriApi;
-			_httpClient = httpClient;
 
 			_configuration.WhenAnyValue(c => c.ShikimoriUsername)
 						  .Subscribe(async newName => await OnUserNameChanged(newName));
