@@ -13,7 +13,7 @@
               Classes="centered">
             <TextBlock Text="😢"
                        Grid.Row="0"
-                       Classes="centered extraLarge"/>
+                       Classes="centered extraLarge" />
 
             <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
                        Grid.Row="1"
@@ -25,24 +25,63 @@
                     Classes="centered medium"
                     Grid.Row="2" />
         </Grid>
-        
+
         <Grid RowDefinitions="Auto, Auto, Auto"
-              IsVisible="{Binding IsAuthorized}"
+              IsVisible="{Binding IsLoading}"
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
-            <TextBlock Text="🗿"
+            <TextBlock Text="🤟"
                        Grid.Row="0"
-                       Classes="centered extraLarge"/>
+                       Classes="centered extraLarge" />
 
-            <TextBlock Text="С авторизацией все ок, но списка пока нет"
+            <TextBlock Text="С авторизацией все ок, загружаем список аниме, &#x0a;пожалуйста подождите"
                        Grid.Row="1"
                        Margin="15"
-                       Classes="centered medium"/>
+                       Classes="centered medium" />
 
             <Button Content="Сменить аккаунт"
                     Command="{Binding OpenLoginDialog}"
                     Classes="centered medium"
                     Grid.Row="2" />
         </Grid>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="15">
+            <ItemsControl Items="{Binding Animes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="*, Auto"
+                              Width="200"
+                              Height="250"
+                              Margin="15">
+                            <Image Source="{Binding Poster}"
+                                   Stretch="Fill"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2" />
+
+                            <Grid Grid.Row="1"
+                                  Height="60"
+                                  VerticalAlignment="Bottom"
+                                  Background="#96969696">
+                                <TextBlock Text="{Binding Name}"
+                                           Classes="centered small"
+                                           MaxLines="2"
+                                           Foreground="White"
+                                           TextWrapping="WrapWithOverflow"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="5"/>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>

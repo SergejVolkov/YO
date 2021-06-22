@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace YO.Internals.Shikimori.Data
@@ -7,6 +8,9 @@ namespace YO.Internals.Shikimori.Data
 	{
 		[JsonProperty("name")]
 		public string Name { get; set; }
+		
+		[JsonProperty("image")]
+		public Dictionary<ImageType, string> Images { get; set; }
 		
 		[JsonProperty("status")]
 		public AnimeStatus Status { get; set; }

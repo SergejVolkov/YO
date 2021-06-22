@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Avalonia" Version="0.10.3" />
       <PackageReference Include="ReactiveUI" Version="14.1.1" />
       <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
       <ProjectReference Include="..\YO.Internals.Shikimori\YO.Internals.Shikimori.csproj" />

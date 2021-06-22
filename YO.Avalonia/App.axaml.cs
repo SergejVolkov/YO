@@ -1,10 +1,12 @@
 using System;
+using System.Net.Http;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using YO.Avalonia.Views;
 using YO.Internals.Configuration;
+using YO.Internals.Shikimori;
 using YO.Internals.ViewModels;
 
 namespace YO.Avalonia
@@ -38,9 +40,12 @@ namespace YO.Avalonia
 
 		private static IServiceProvider ConfigureServices(IServiceCollection services)
 		{
+			services.AddScoped<HttpClient>();
+
 			services.AddSingleton<IConfigurationManager, ConfigurationManager>();
 			services.AddSingleton(provider => provider.GetRequiredService<IConfigurationManager>().Configuration);
-			
+			services.AddSingleton<IShikimoriApi, ShikimoriApi>();
+
 			services.AddSingleton<MainWindowViewModel>();
 			services.AddSingleton<LoginViewModel>();
 			
