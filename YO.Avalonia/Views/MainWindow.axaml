@@ -8,45 +8,9 @@
         Title="YO: Твои онгоинги">
 
     <Grid>
-        <Grid RowDefinitions="Auto, Auto, Auto"
-              IsVisible="{Binding !IsAuthorized}"
-              Classes="centered">
-            <TextBlock Text="😢"
-                       Grid.Row="0"
-                       Classes="centered extraLarge" />
-
-            <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
-                       Grid.Row="1"
-                       Margin="15"
-                       Classes="centered medium" />
-
-            <Button Content="Проверить авторизацию"
-                    Command="{Binding OpenLoginDialog}"
-                    Classes="centered medium"
-                    Grid.Row="2" />
-        </Grid>
-
-        <Grid RowDefinitions="Auto, Auto, Auto"
-              IsVisible="{Binding IsLoading}"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center">
-            <TextBlock Text="🤟"
-                       Grid.Row="0"
-                       Classes="centered extraLarge" />
-
-            <TextBlock Text="С авторизацией все ок, загружаем список аниме, &#x0a;пожалуйста подождите"
-                       Grid.Row="1"
-                       Margin="15"
-                       Classes="centered medium" />
-
-            <Button Content="Сменить аккаунт"
-                    Command="{Binding OpenLoginDialog}"
-                    Classes="centered medium"
-                    Grid.Row="2" />
-        </Grid>
-
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto"
+                      IsVisible="{Binding !IsLoading}"
                       Margin="15">
             <ItemsControl Items="{Binding Animes}">
                 <ItemsControl.ItemsPanel>
@@ -83,5 +47,42 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+        
+        <Grid RowDefinitions="Auto, Auto, Auto"
+              IsVisible="{Binding !IsAuthorized}"
+              Classes="centered">
+            <TextBlock Text="😢"
+                       Grid.Row="0"
+                       Classes="centered extraLarge" />
+
+            <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
+                       Grid.Row="1"
+                       Margin="15"
+                       Classes="centered medium" />
+
+            <Button Content="Проверить авторизацию"
+                    Command="{Binding OpenLoginDialog}"
+                    Classes="centered medium"
+                    Grid.Row="2" />
+        </Grid>
+
+        <Grid RowDefinitions="Auto, Auto, Auto"
+              IsVisible="{Binding IsLoading}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <TextBlock Text="🤟"
+                       Grid.Row="0"
+                       Classes="centered extraLarge" />
+
+            <TextBlock Text="С авторизацией все ок, загружаем список аниме, &#x0a;пожалуйста подождите"
+                       Grid.Row="1"
+                       Margin="15"
+                       Classes="centered medium" />
+
+            <Button Content="Сменить аккаунт"
+                    Command="{Binding OpenLoginDialog}"
+                    Classes="centered medium"
+                    Grid.Row="2" />
+        </Grid>
     </Grid>
 </Window>
