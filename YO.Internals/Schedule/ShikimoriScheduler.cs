@@ -14,7 +14,7 @@ namespace YO.Internals.Schedule
 		private readonly IConfiguration _configuration;
 		private readonly IShikimoriApi _shikimoriApi;
 		private readonly List<ScheduledEpisode> _entries;
-		private long? _userId;
+		private long _userId;
 
 		public ShikimoriScheduler(IConfiguration configuration, IShikimoriApi shikimoriApi)
 		{
@@ -29,18 +29,11 @@ namespace YO.Internals.Schedule
 
 		public async Task ScheduleAnime(AnimeInfo anime)
 		{
-			if (_userId is null)
-			{
-				var user = await _shikimoriApi.Users.GetByNickname(_configuration.ShikimoriUsername);
-				_userId = user.Id;
-			}
-
-			var userRates = await _shikimoriApi.UserRates.GetUserRates(new GetUserRatesParameters()
-			{
-				UserId = _userId,
-				TargetType = DataType.Anime,
-				TargetId = anime.Id
-			});
+			var userRates = await _shikimoriApi.UserRates
+											   .GetUserRates()
+											   .WithUserId(_userId)
+											   .WithTargetType(DataType.Anime)
+											   .WithTargetId(anime.Id);
 
 			ScheduleAnime(anime, userRates.Single());
 		}

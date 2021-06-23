@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using YO.Internals.Shikimori.Categories.Abstractions;
 using YO.Internals.Shikimori.Data;
-using YO.Internals.Shikimori.Parameters;
+using YO.Internals.Shikimori.Fluent;
 
 namespace YO.Internals.Shikimori.Categories
 {
@@ -13,10 +12,10 @@ namespace YO.Internals.Shikimori.Categories
 			: base(httpClient, baseUrl + "/animes")
 		{ }
 
-		public Task<IReadOnlyCollection<AnimeInfo>?> GetAnimes(GetAnimesParameters parameters)
-			=> GetAsync<IReadOnlyCollection<AnimeInfo>>(string.Empty, parameters);
-
-		public Task<AnimeInfo?> GetAnime(long id)
-			=> GetAsync<AnimeInfo>($"/{id}", ParametersBase.Empty);
+		public FluentApiRequest<AnimeInfo?> GetAnime(long id)
+			=> new(GetAsync<AnimeInfo>, $"/{id}");
+		
+		public GetAnimesFluentRequest GetAnimes()
+			=> new GetAnimesFluentRequest(GetAsync<IReadOnlyCollection<AnimeInfo>>, string.Empty);
 	}
 }

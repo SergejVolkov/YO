@@ -1,8 +1,7 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using YO.Internals.Shikimori.Categories.Abstractions;
 using YO.Internals.Shikimori.Data;
-using YO.Internals.Shikimori.Parameters;
+using YO.Internals.Shikimori.Fluent;
 
 namespace YO.Internals.Shikimori.Categories
 {
@@ -12,14 +11,11 @@ namespace YO.Internals.Shikimori.Categories
 			: base(httpClient, baseUrl + "/users")
 		{ }
 
-		public Task<User?> GetById(long id)
-			=> GetAsync<User>($"/{id}", ParametersBase.Empty);
+		public FluentApiRequest<User?> GetById(long id)
+			=> new (GetAsync<User>, $"/{id}");
 
-		public Task<User?> GetByNickname(string nickname)
-		{
-			var parameters = ParametersBase.Empty;
-			parameters["is_nickname"] = 1;
-			return GetAsync<User>($"/{nickname}", parameters);
-		}
+		public FluentApiRequest<User?> GetByNickname(string nickname) 
+			=> new FluentApiRequest<User?> (GetAsync<User>, $"/{nickname}")
+				.With("is_nickname", 1);
 	}
 }

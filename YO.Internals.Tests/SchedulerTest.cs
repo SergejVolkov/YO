@@ -57,11 +57,6 @@ namespace YO.Internals.Tests
 			A.CallTo(() => _configuration.ShikimoriUsername).Returns(_testUser.Nickname);
 			A.CallTo(() => _configuration.EpisodesPerDay).Returns(1);
 			A.CallTo(() => _configuration.DelayForNewSeries).Returns(1);
-
-			A.CallTo(() => _shikimoriApi.Users.GetByNickname(_testUser.Nickname)).Returns(_testUser);
-			A.CallTo(() => _shikimoriApi.Animes.GetAnime(_testOngoingAnime.Id)).Returns(_testOngoingAnime);
-			A.CallTo(() => _shikimoriApi.UserRates.GetUserRates(_getUserRatesParameters))
-			 .Returns(new List<UserRate> {_testRate});
 		}
 
 		[TestCase(1, 0)]

@@ -4,6 +4,12 @@ namespace YO.Internals.Shikimori.Parameters
 {
 	public class GetAnimesParameters : ParametersBase
 	{
+		public IEnumerable<long>? Ids
+		{
+			get => base["ids"] as IEnumerable<long>;
+			set => base["ids"] = value;
+		}
+		
 		public int? Page
 		{
 			get => base["page"] as int?;
@@ -14,12 +20,6 @@ namespace YO.Internals.Shikimori.Parameters
 		{
 			get => base["limit"] as int?;
 			set => base["limit"] = value;
-		}
-
-		public IEnumerable<long>? Ids
-		{
-			get => base["ids"] as IEnumerable<long>;
-			set => base["ids"] = value;
 		}
 	}
 }

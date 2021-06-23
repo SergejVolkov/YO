@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using YO.Internals.Shikimori.Categories.Abstractions;
 using YO.Internals.Shikimori.Data;
-using YO.Internals.Shikimori.Parameters;
+using YO.Internals.Shikimori.Fluent;
 
 namespace YO.Internals.Shikimori.Categories
 {
@@ -13,7 +12,7 @@ namespace YO.Internals.Shikimori.Categories
 			: base(httpClient, baseUrl + "/v2/user_rates")
 		{ }
 
-		public Task<IReadOnlyCollection<UserRate>?> GetUserRates(GetUserRatesParameters parameters) 
-			=> GetAsync<IReadOnlyCollection<UserRate>?>("", parameters);
+		public GetUserRatesFluentRequest GetUserRates() 
+			=> new (GetAsync<IReadOnlyCollection<UserRate>?>, string.Empty);
 	}
 }

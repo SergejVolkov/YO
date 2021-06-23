@@ -59,21 +59,18 @@ namespace YO.Internals.ViewModels
 			if (IsAuthorized)
 			{
 				IsLoading = true;
-				var user = await _shikimoriApi.Users.GetByNickname(newName);
-				var rateRequestParams = new GetUserRatesParameters()
-				{
-					UserId = user.Id,
-					TargetType = DataType.Anime,
-					Status = RateStatus.Watching
-				};
-				var animeRates = await _shikimoriApi.UserRates.GetUserRates(rateRequestParams);
-				var animeIds = animeRates.Select(ur => ur.TargetId);
-				var animeRequestParams = new GetAnimesParameters()
-				{
-					Ids = animeIds,
-					Limit = 50
-				};
-				var animes = await _shikimoriApi.Animes.GetAnimes(animeRequestParams);
+				var user = await _shikimoriApi.Users
+											  .GetByNickname(newName);
+				var animeRates = await _shikimoriApi.UserRates
+													.GetUserRates()
+													.WithUserId(user.Id)
+													.WithTargetType(DataType.Anime)
+													.WithStatus(RateStatus.Watching);
+				var animes = await _shikimoriApi.Animes
+												.GetAnimes()
+												.WithIds(animeRates.Select(ur => ur.TargetId))
+												.WithLimit(50);
+				
 				using (var webClient = new WebClient())
 				{
 					var list = new List<AnimeViewModel>();

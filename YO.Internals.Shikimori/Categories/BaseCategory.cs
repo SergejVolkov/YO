@@ -17,7 +17,7 @@ namespace YO.Internals.Shikimori.Categories
 			_baseUrl = baseUrl;
 		}
 
-		protected async Task<T?> GetAsync<T>(string requestPath, ParametersBase parameters)
+		protected async Task<TResult?> GetAsync<TResult>(string requestPath, ParametersBase parameters)
 		{
 			var fullPath = parameters.BuildQuery(_baseUrl + requestPath);
 			var httpRequest = new HttpRequestMessage(HttpMethod.Get, fullPath);
@@ -29,14 +29,14 @@ namespace YO.Internals.Shikimori.Categories
 			}
 
 			var response = await httpResponse.Content.ReadAsStringAsync();
-			return HandleResponse<T>(response);
+			return HandleResponse<TResult>(response);
 		}
 
-		private T? HandleResponse<T>(string response)
+		private static TResult? HandleResponse<TResult>(string response)
 		{
 			try
 			{
-				return JsonConvert.DeserializeObject<T>(response);
+				return JsonConvert.DeserializeObject<TResult>(response);
 			} catch (JsonSerializationException)
 			{
 				return default;

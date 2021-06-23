@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using YO.Internals.Shikimori.Data;
+﻿using YO.Internals.Shikimori.Data;
+using YO.Internals.Shikimori.Fluent;
 
 namespace YO.Internals.Shikimori.Categories.Abstractions
 {
 	public interface IUsers
 	{
-		Task<User?> GetById(long id);
-		Task<User?> GetByNickname(string nickname);
+		FluentApiRequest<User?> GetById(long id);
+		FluentApiRequest<User?> GetByNickname(string nickname);
 	}
 }

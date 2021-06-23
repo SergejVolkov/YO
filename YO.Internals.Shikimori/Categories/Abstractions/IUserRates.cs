@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using YO.Internals.Shikimori.Data;
-using YO.Internals.Shikimori.Parameters;
+﻿using YO.Internals.Shikimori.Fluent;
 
 namespace YO.Internals.Shikimori.Categories.Abstractions
 {
 	public interface IUserRates
 	{
-		Task<IReadOnlyCollection<UserRate>?> GetUserRates(GetUserRatesParameters parameters);
+		GetUserRatesFluentRequest GetUserRates();
 	}
 }

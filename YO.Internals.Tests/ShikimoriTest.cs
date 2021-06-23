@@ -15,7 +15,7 @@ namespace YO.Internals.Tests
 		public async Task GetUserTest(int userId, string userNickname)
 		{
 			var client = GetApiClient();
-			
+
 			var user = await client.Users.GetById(userId);
 			Assert.NotNull(user);
 			Assert.AreEqual(userId, user.Id);
@@ -26,7 +26,7 @@ namespace YO.Internals.Tests
 			Assert.AreEqual(userId, user.Id);
 			Assert.AreEqual(userNickname, user.Nickname);
 		}
-		
+
 		[TestCase(39535, "Mushoku Tensei: Isekai Ittara Honki Dasu", true)]
 		[TestCase(21, "One Piece", false)]
 		public async Task GetAnimeTest(int animeId, string animeName, bool isReleased)
@@ -49,20 +49,18 @@ namespace YO.Internals.Tests
 		public async Task GetUserRateTest(int userId, int animeId)
 		{
 			var client = GetApiClient();
-			var requestParameters = new GetUserRatesParameters()
-			{
-				UserId = userId,
-				TargetType = DataType.Anime,
-				TargetId = animeId
-			};
-			var userRates = await client.UserRates.GetUserRates(requestParameters);
-			
+			var userRates = await client.UserRates
+										.GetUserRates()
+										.WithUserId(userId)
+										.WithTargetType(DataType.Anime)
+										.WithTargetId(animeId);
+
 			Assert.NotNull(userRates);
 			Assert.IsNotEmpty(userRates);
 			Assert.AreEqual(1, userRates.Count);
 		}
-		
-		private static IShikimoriApi GetApiClient() 
+
+		private static IShikimoriApi GetApiClient()
 			=> new ShikimoriApi(new HttpClient());
 	}
 }
