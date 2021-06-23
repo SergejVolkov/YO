@@ -19,7 +19,6 @@ namespace YO.Internals.Tests
 		private User _testUser;
 		private AnimeInfo _testOngoingAnime;
 		private UserRate _testRate;
-		private GetUserRatesParameters _getUserRatesParameters;
 
 		[SetUp]
 		public void SetUp()
@@ -43,12 +42,6 @@ namespace YO.Internals.Tests
 				TargetType = DataType.Anime, 
 				TargetId = _testOngoingAnime.Id,
 				Episodes = 0,
-			};
-			_getUserRatesParameters = new GetUserRatesParameters
-			{
-				UserId = _testUser.Id, 
-				TargetType = DataType.Anime, 
-				TargetId = _testOngoingAnime.Id
 			};
 
 			_configuration = A.Fake<IConfiguration>();

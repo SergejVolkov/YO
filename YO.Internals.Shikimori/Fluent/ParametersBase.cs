@@ -6,7 +6,7 @@ using YO.Internals.Shikimori.Data;
 
 namespace YO.Internals.Shikimori.Parameters
 {
-	public abstract class ParametersBase
+	public class ParametersBase
 	{
 		private readonly Dictionary<string, object?> _parameters = new();
 
@@ -16,7 +16,7 @@ namespace YO.Internals.Shikimori.Parameters
 			set => _parameters[parameter] = value;
 		}
 
-		internal static ParametersBase Empty => new GetUserRatesParameters();
+		internal static ParametersBase Empty => new ();
 
 		internal Uri BuildQuery(string baseUrl)
 		{

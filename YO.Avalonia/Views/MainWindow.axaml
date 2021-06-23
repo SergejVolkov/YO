@@ -7,82 +7,123 @@
         x:Class="YO.Avalonia.Views.MainWindow"
         Title="YO: Твои онгоинги">
 
-    <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto"
-                      IsVisible="{Binding !IsLoading}"
-                      Margin="15">
-            <ItemsControl Items="{Binding Animes}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top"
+              Background="#96969696">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Обновить" Command="{Binding RefreshList}"/>
+                <MenuItem Header="Открыть Шикимори..." />
+                <Separator />
+                <MenuItem Header="Выйти" />
+            </MenuItem>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid RowDefinitions="*, Auto"
-                              Width="200"
-                              Height="250"
-                              Margin="15">
-                            <Image Source="{Binding Poster}"
-                                   Stretch="Fill"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2" />
+            <MenuItem Header="Вид">
+                <MenuItem Header="Режим списка" />
+                <Separator />
+                <MenuItem Header="Сортировка по">
+                    <MenuItem Header="Оценке" />
+                    <MenuItem Header="Году" />
+                    <MenuItem Header="Прогрессу" />
+                    <MenuItem Header="Алфавиту" />
+                </MenuItem>
+                <MenuItem Header="Расписание с текущего дня" />
+                <Separator />
+                <MenuItem Header="Темная тема" />
+            </MenuItem>
 
-                            <Grid Grid.Row="1"
-                                  Height="60"
-                                  VerticalAlignment="Bottom"
-                                  Background="#96969696">
-                                <TextBlock Text="{Binding Name}"
-                                           Classes="centered small"
-                                           MaxLines="2"
-                                           Foreground="White"
-                                           TextWrapping="WrapWithOverflow"
-                                           TextTrimming="CharacterEllipsis"
-                                           Margin="5"/>
+            <MenuItem Header="Действия">
+                <MenuItem Header="Исключит просроченные..." />
+                <MenuItem Header="Сбросить просроченные..." />
+                <MenuItem Header="Перестроить расписание..." />
+            </MenuItem>
+
+            <MenuItem Header="Настройки">
+                <MenuItem Header="Запускать вместе с Windows" />
+                <MenuItem Header="Названия на романзи" />
+                <MenuItem Header="Задержка онгоингов..." />
+                <Separator />
+                <MenuItem Header="Сменить аккаунт..." Command="{Binding OpenLoginDialog}" />
+            </MenuItem>
+
+            <MenuItem Header="Справка">
+                <MenuItem Header="Помощь..." />
+                <MenuItem Header="О программе" />
+                <MenuItem Header="Правообладателям" />
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding !IsLoading}"
+                          Margin="15">
+                <ItemsControl Items="{Binding Animes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid RowDefinitions="*, Auto"
+                                  Width="200"
+                                  Height="250"
+                                  Margin="15">
+                                <Image Source="{Binding Poster}"
+                                       Stretch="Fill"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="2" />
+
+                                <Grid Grid.Row="1"
+                                      Height="60"
+                                      VerticalAlignment="Bottom"
+                                      Background="#96969696">
+                                    <TextBlock Text="{Binding Name}"
+                                               Classes="centered small"
+                                               MaxLines="2"
+                                               Foreground="White"
+                                               TextWrapping="WrapWithOverflow"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="5" />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        
-        <Grid RowDefinitions="Auto, Auto, Auto"
-              IsVisible="{Binding !IsAuthorized}"
-              Classes="centered">
-            <TextBlock Text="😢"
-                       Grid.Row="0"
-                       Classes="centered extraLarge" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
-            <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
-                       Grid.Row="1"
-                       Margin="15"
-                       Classes="centered medium" />
+            <Grid RowDefinitions="Auto, Auto, Auto"
+                  IsVisible="{Binding !IsAuthorized}"
+                  Classes="centered">
+                <TextBlock Text="😢"
+                           Grid.Row="0"
+                           Classes="centered extraLarge" />
 
-            <Button Content="Проверить авторизацию"
-                    Command="{Binding OpenLoginDialog}"
-                    Classes="centered medium"
-                    Grid.Row="2" />
+                <TextBlock Text="Не могу загрузить список аниме с Shikimori. &#x0a;Пожалуйста проверьте авторизацию..."
+                           Grid.Row="1"
+                           Margin="15"
+                           Classes="centered medium" />
+
+                <Button Content="Проверить авторизацию"
+                        Command="{Binding OpenLoginDialog}"
+                        Classes="centered medium"
+                        Grid.Row="2" />
+            </Grid>
+
+            <Grid RowDefinitions="Auto, Auto"
+                  IsVisible="{Binding IsLoading}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+                <TextBlock Text="🤟"
+                           Grid.Row="0"
+                           Classes="centered extraLarge" />
+
+                <TextBlock Text="С авторизацией все ок, загружаем список аниме, &#x0a;пожалуйста подождите"
+                           Grid.Row="1"
+                           Margin="15"
+                           Classes="centered medium" />
+            </Grid>
         </Grid>
-
-        <Grid RowDefinitions="Auto, Auto, Auto"
-              IsVisible="{Binding IsLoading}"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center">
-            <TextBlock Text="🤟"
-                       Grid.Row="0"
-                       Classes="centered extraLarge" />
-
-            <TextBlock Text="С авторизацией все ок, загружаем список аниме, &#x0a;пожалуйста подождите"
-                       Grid.Row="1"
-                       Margin="15"
-                       Classes="centered medium" />
-
-            <Button Content="Сменить аккаунт"
-                    Command="{Binding OpenLoginDialog}"
-                    Classes="centered medium"
-                    Grid.Row="2" />
-        </Grid>
-    </Grid>
+    </DockPanel>
 </Window>

@@ -25,18 +25,19 @@ namespace YO.Internals.ViewModels
 
 		public Interaction<LoginViewModel, string> ShowLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> OpenLoginDialog { get; }
-		
+		public ReactiveCommand<Unit, Unit> RefreshList { get; }
+
 		[Reactive]
 		public bool IsAuthorized { get; set; }
-		
+
 		[Reactive]
 		public bool IsLoading { get; set; }
-		
+
 		[Reactive]
 		public IEnumerable<AnimeViewModel>? Animes { get; set; }
 
-		public MainWindowViewModel(IConfiguration configuration, 
-								   IShikimoriApi shikimoriApi,IPosterCache posterCache)
+		public MainWindowViewModel(IConfiguration configuration,
+								   IShikimoriApi shikimoriApi, IPosterCache posterCache)
 		{
 			_configuration = configuration;
 			_shikimoriApi = shikimoriApi;
@@ -44,8 +45,11 @@ namespace YO.Internals.ViewModels
 
 			_configuration.WhenAnyValue(c => c.ShikimoriUsername)
 						  .Subscribe(async newName => await OnUserNameChanged(newName));
+			
 			ShowLoginDialog = new Interaction<LoginViewModel, string>();
+			
 			OpenLoginDialog = ReactiveCommand.CreateFromTask(OpenLoginDialogImpl);
+			RefreshList = ReactiveCommand.CreateFromTask(UpdateAnimeList);
 		}
 
 		private async Task OpenLoginDialogImpl()
@@ -57,35 +61,52 @@ namespace YO.Internals.ViewModels
 		private async Task OnUserNameChanged(string? newName)
 		{
 			IsAuthorized = !string.IsNullOrEmpty(newName);
-			
+
 			if (IsAuthorized)
 			{
-				IsLoading = true;
-				var user = await _shikimoriApi.Users
-											  .GetByNickname(newName);
-				var animeRates = await _shikimoriApi.UserRates
-													.GetUserRates()
-													.WithUserId(user.Id)
-													.WithTargetType(DataType.Anime)
-													.WithStatus(RateStatus.Watching);
-				var animes = await _shikimoriApi.Animes
-												.GetAnimes()
-												.WithIds(animeRates.Select(ur => ur.TargetId))
-												.WithLimit(50);
-				
-				var list = new List<AnimeViewModel>();
-				foreach (var animeInfo in animes)
-				{
-					var anime = new AnimeViewModel(animeInfo)
-					{
-						Poster = await _posterCache.TryGetPoster(animeInfo)
-					};
-					list.Add(anime);
-				}
-				Animes = list;
-
-				IsLoading = false;
+				await UpdateAnimeList();
+			} else
+			{
+				Animes = null;
 			}
+		}
+
+		private async Task UpdateAnimeList()
+		{
+			Animes = null;
+
+			if (!IsAuthorized)
+			{
+				return;
+			}
+			
+			IsLoading = true;
+
+			var user = await _shikimoriApi.Users
+										  .GetByNickname(_configuration.ShikimoriUsername);
+			var animeRates = await _shikimoriApi.UserRates
+												.GetUserRates()
+												.WithUserId(user.Id)
+												.WithTargetType(DataType.Anime)
+												.WithStatus(RateStatus.Watching);
+			var animes = await _shikimoriApi.Animes
+											.GetAnimes()
+											.WithIds(animeRates.Select(ur => ur.TargetId))
+											.WithLimit(50);
+
+			var list = new List<AnimeViewModel>();
+			foreach (var animeInfo in animes)
+			{
+				var anime = new AnimeViewModel(animeInfo)
+				{
+					Poster = await _posterCache.TryGetPoster(animeInfo)
+				};
+				list.Add(anime);
+			}
+
+			Animes = list;
+
+			IsLoading = false;
 		}
 	}
 }
