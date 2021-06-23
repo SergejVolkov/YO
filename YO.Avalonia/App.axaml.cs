@@ -48,7 +48,7 @@ namespace YO.Avalonia
 			services.AddSingleton<IConfigurationManager, ConfigurationManager>();
 			services.AddSingleton(provider => provider.GetRequiredService<IConfigurationManager>().Configuration);
 			services.AddSingleton<IShikimoriApi, ShikimoriApi>();
-			services.AddSingleton<IPosterCache, PosterCache>();
+			services.AddSingleton<IImageCache, ImageCache>();
 
 			services.AddSingleton<MainWindowViewModel>();
 			services.AddSingleton<LoginViewModel>();

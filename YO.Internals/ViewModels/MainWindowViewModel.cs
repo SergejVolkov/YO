@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using YO.Internals.Cache;
@@ -21,7 +22,7 @@ namespace YO.Internals.ViewModels
 	{
 		private readonly IConfiguration _configuration;
 		private readonly IShikimoriApi _shikimoriApi;
-		private readonly IPosterCache _posterCache;
+		private readonly IImageCache _imageCache;
 
 		public Interaction<LoginViewModel, string> ShowLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> OpenLoginDialog { get; }
@@ -35,13 +36,19 @@ namespace YO.Internals.ViewModels
 
 		[Reactive]
 		public IEnumerable<AnimeViewModel>? Animes { get; set; }
+		
+		[Reactive]
+		public string? UserName { get; set; }
+		
+		[Reactive]
+		public Bitmap? UserPicture { get; set; }
 
 		public MainWindowViewModel(IConfiguration configuration,
-								   IShikimoriApi shikimoriApi, IPosterCache posterCache)
+								   IShikimoriApi shikimoriApi, IImageCache imageCache)
 		{
 			_configuration = configuration;
 			_shikimoriApi = shikimoriApi;
-			_posterCache = posterCache;
+			_imageCache = imageCache;
 
 			_configuration.WhenAnyValue(c => c.ShikimoriUsername)
 						  .Subscribe(async newName => await OnUserNameChanged(newName));
@@ -61,12 +68,14 @@ namespace YO.Internals.ViewModels
 		private async Task OnUserNameChanged(string? newName)
 		{
 			IsAuthorized = !string.IsNullOrEmpty(newName);
+			UserName = IsAuthorized ? newName : "Ошибка авторизации...";
 
 			if (IsAuthorized)
 			{
 				await UpdateAnimeList();
 			} else
 			{
+				UserPicture = null;
 				Animes = null;
 			}
 		}
@@ -84,6 +93,7 @@ namespace YO.Internals.ViewModels
 
 			var user = await _shikimoriApi.Users
 										  .GetByNickname(_configuration.ShikimoriUsername);
+			UserPicture = await _imageCache.TryGetUserPicture(user);
 			var animeRates = await _shikimoriApi.UserRates
 												.GetUserRates()
 												.WithUserId(user.Id)
@@ -99,7 +109,7 @@ namespace YO.Internals.ViewModels
 			{
 				var anime = new AnimeViewModel(animeInfo)
 				{
-					Poster = await _posterCache.TryGetPoster(animeInfo)
+					Poster = await _imageCache.TryGetAnimePoster(animeInfo)
 				};
 				list.Add(anime);
 			}

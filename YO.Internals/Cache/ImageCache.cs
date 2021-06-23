@@ -9,14 +9,14 @@ using YO.Internals.Shikimori.Data;
 
 namespace YO.Internals.Cache
 {
-	public class PosterCache : IPosterCache
+	public class ImageCache : IImageCache
 	{
 		private const string PostersDirectory = "Posters";
 		private readonly WebClient _webClient;
 		private readonly ConcurrentDictionary<long, Bitmap> _posters = new();
 		private readonly string _postersFolder;
 
-		public PosterCache(WebClient webClient)
+		public ImageCache(WebClient webClient)
 		{
 			_webClient = webClient;
 
@@ -29,24 +29,30 @@ namespace YO.Internals.Cache
 			}
 		}
 
-		public async Task<Bitmap> TryGetPoster(AnimeInfo anime)
+		public Task<Bitmap> TryGetAnimePoster(AnimeInfo anime) 
+			=> TryGetPicture(anime.Id, ShikimoriApi.ShikimoriUrl + anime.Images[ImageType.Original]);
+
+		public Task<Bitmap> TryGetUserPicture(User user) 
+			=> TryGetPicture(user.Id, user.Avatar);
+
+		private async Task<Bitmap> TryGetPicture(long id, string webUrl)
 		{
-			if (_posters.TryGetValue(anime.Id, out var poster))
+			if (_posters.TryGetValue(id, out var poster))
 			{
 				return poster;
 			}
 
-			var filePath = Path.Combine(_postersFolder, $"{anime.Id}.png");
+			var filePath = Path.Combine(_postersFolder, $"{id}.png");
 			if (File.Exists(filePath))
 			{
 				poster = LoadFromDisk(filePath);
 			} else
 			{
-				poster = await LoadFromWeb(ShikimoriApi.ShikimoriUrl + anime.Images[ImageType.Original]);
+				poster = await LoadFromWeb(webUrl);
 				poster.Save(filePath);
 			}
 
-			_posters.TryAdd(anime.Id, poster);
+			_posters.TryAdd(id, poster);
 
 			return poster;
 		}

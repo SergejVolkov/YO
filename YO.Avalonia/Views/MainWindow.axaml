@@ -8,49 +8,75 @@
         Title="YO: Твои онгоинги">
 
     <DockPanel>
-        <Menu DockPanel.Dock="Top"
+        <Grid ColumnDefinitions="*, Auto"
+              DockPanel.Dock="Top"
               Background="#96969696">
-            <MenuItem Header="Файл">
-                <MenuItem Header="Обновить" Command="{Binding RefreshList}"/>
-                <MenuItem Header="Открыть Шикимори..." />
-                <Separator />
-                <MenuItem Header="Выйти" />
-            </MenuItem>
-
-            <MenuItem Header="Вид">
-                <MenuItem Header="Режим списка" />
-                <Separator />
-                <MenuItem Header="Сортировка по">
-                    <MenuItem Header="Оценке" />
-                    <MenuItem Header="Году" />
-                    <MenuItem Header="Прогрессу" />
-                    <MenuItem Header="Алфавиту" />
+            <Menu Grid.Column="0">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Обновить" Command="{Binding RefreshList}" />
+                    <MenuItem Header="Открыть Шикимори..." />
+                    <Separator />
+                    <MenuItem Header="Выйти" />
                 </MenuItem>
-                <MenuItem Header="Расписание с текущего дня" />
-                <Separator />
-                <MenuItem Header="Темная тема" />
-            </MenuItem>
 
-            <MenuItem Header="Действия">
-                <MenuItem Header="Исключит просроченные..." />
-                <MenuItem Header="Сбросить просроченные..." />
-                <MenuItem Header="Перестроить расписание..." />
-            </MenuItem>
+                <MenuItem Header="Вид">
+                    <MenuItem Header="Режим списка" />
+                    <Separator />
+                    <MenuItem Header="Сортировка по">
+                        <MenuItem Header="Оценке" />
+                        <MenuItem Header="Году" />
+                        <MenuItem Header="Прогрессу" />
+                        <MenuItem Header="Алфавиту" />
+                    </MenuItem>
+                    <MenuItem Header="Расписание с текущего дня" />
+                    <Separator />
+                    <MenuItem Header="Темная тема" />
+                </MenuItem>
 
-            <MenuItem Header="Настройки">
-                <MenuItem Header="Запускать вместе с Windows" />
-                <MenuItem Header="Названия на романзи" />
-                <MenuItem Header="Задержка онгоингов..." />
-                <Separator />
-                <MenuItem Header="Сменить аккаунт..." Command="{Binding OpenLoginDialog}" />
-            </MenuItem>
+                <MenuItem Header="Действия">
+                    <MenuItem Header="Исключит просроченные..." />
+                    <MenuItem Header="Сбросить просроченные..." />
+                    <MenuItem Header="Перестроить расписание..." />
+                </MenuItem>
 
-            <MenuItem Header="Справка">
-                <MenuItem Header="Помощь..." />
-                <MenuItem Header="О программе" />
-                <MenuItem Header="Правообладателям" />
-            </MenuItem>
-        </Menu>
+                <MenuItem Header="Настройки">
+                    <MenuItem Header="Запускать вместе с Windows" />
+                    <MenuItem Header="Названия на романзи" />
+                    <MenuItem Header="Задержка онгоингов..." />
+                </MenuItem>
+
+                <MenuItem Header="Справка">
+                    <MenuItem Header="Помощь..." />
+                    <MenuItem Header="О программе" />
+                    <MenuItem Header="Правообладателям" />
+                </MenuItem>
+            </Menu>
+
+
+            <Button Grid.Column="1"
+                    Background="Transparent"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Left"
+                    Command="{Binding OpenLoginDialog}">
+                <Grid Margin="5, 0"
+                      ColumnDefinitions="Auto, Auto">
+                    <Border Grid.Column="0"
+                            CornerRadius="25"
+                            IsVisible="{Binding IsAuthorized}"
+                            Width="25"
+                            Height="25"
+                            ClipToBounds="True">
+                        <Image Source="{Binding UserPicture}"/>
+                    </Border>
+                    
+                    <TextBlock Text="{Binding UserName}"
+                               Margin="5 0"
+                               VerticalAlignment="Center"
+                               Grid.Column="1"/>
+                </Grid>
+            </Button>
+        </Grid>
+
 
         <Grid>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled"

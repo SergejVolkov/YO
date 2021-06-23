@@ -6,5 +6,8 @@ namespace YO.Internals.Shikimori.Data
 	{
 		[JsonProperty("nickname")]
 		public string Nickname { get; set; }
+
+		[JsonProperty("avatar")]
+		public string Avatar { get; set; }
 	}
 }

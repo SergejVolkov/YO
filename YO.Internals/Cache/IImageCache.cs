@@ -4,8 +4,10 @@ using YO.Internals.Shikimori.Data;
 
 namespace YO.Internals.Cache
 {
-	public interface IPosterCache
+	public interface IImageCache
 	{
-		Task<Bitmap> TryGetPoster(AnimeInfo anime);
+		Task<Bitmap> TryGetAnimePoster(AnimeInfo anime);
+
+		Task<Bitmap> TryGetUserPicture(User user);
 	}
 }
