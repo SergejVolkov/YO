@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using YO.Internals.Cache;
 using YO.Internals.Configuration;
 using YO.Internals.Extensions;
 using YO.Internals.Shikimori;
@@ -20,6 +21,7 @@ namespace YO.Internals.ViewModels
 	{
 		private readonly IConfiguration _configuration;
 		private readonly IShikimoriApi _shikimoriApi;
+		private readonly IPosterCache _posterCache;
 
 		public Interaction<LoginViewModel, string> ShowLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> OpenLoginDialog { get; }
@@ -31,14 +33,14 @@ namespace YO.Internals.ViewModels
 		public bool IsLoading { get; set; }
 		
 		[Reactive]
-		public IEnumerable<AnimeViewModel> Animes { get; set; }
+		public IEnumerable<AnimeViewModel>? Animes { get; set; }
 
 		public MainWindowViewModel(IConfiguration configuration, 
-								   IShikimoriApi shikimoriApi,
-								   HttpClient httpClient)
+								   IShikimoriApi shikimoriApi,IPosterCache posterCache)
 		{
 			_configuration = configuration;
 			_shikimoriApi = shikimoriApi;
+			_posterCache = posterCache;
 
 			_configuration.WhenAnyValue(c => c.ShikimoriUsername)
 						  .Subscribe(async newName => await OnUserNameChanged(newName));
@@ -71,20 +73,17 @@ namespace YO.Internals.ViewModels
 												.WithIds(animeRates.Select(ur => ur.TargetId))
 												.WithLimit(50);
 				
-				using (var webClient = new WebClient())
+				var list = new List<AnimeViewModel>();
+				foreach (var animeInfo in animes)
 				{
-					var list = new List<AnimeViewModel>();
-					foreach (var animeInfo in animes)
+					var anime = new AnimeViewModel(animeInfo)
 					{
-						var anime = new AnimeViewModel(animeInfo)
-						{
-							Poster = await animeInfo.GetAnimePoster(webClient)
-						};
-						list.Add(anime);
-					}
-					Animes = list;
+						Poster = await _posterCache.TryGetPoster(animeInfo)
+					};
+					list.Add(anime);
 				}
-				
+				Animes = list;
+
 				IsLoading = false;
 			}
 		}

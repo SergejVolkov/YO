@@ -16,7 +16,7 @@ namespace YO.Internals.Shikimori.Fluent
 		{ }
 
 		public GetUserRatesFluentRequest WithUserId(long userId) 
-			=> With("userId", userId);
+			=> With("user_id", userId);
 
 		public GetUserRatesFluentRequest WithTargetId(long targetId)
 			=> With("target_id", targetId);
