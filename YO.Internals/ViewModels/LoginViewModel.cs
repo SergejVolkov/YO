@@ -1,3 +1,4 @@
+using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
@@ -17,21 +18,7 @@ namespace YO.Internals.ViewModels
 		private readonly IConfiguration _configuration;
 		private readonly IShikimoriApi _shikimoriApi;
 		private readonly IImageCache _imageCache;
-
-		[Reactive]
-		public string? ShikimoriUsername { get; set; }
-
-		[Reactive]
-		public User? UserInfo { get; set; }
-
-		[Reactive]
-		public Bitmap? UserPicture { get; set; }
-
-		[Reactive]
-		public bool IsAuthorized { get; set; }
 		
-		public ReactiveCommand<Unit, Unit> Confirm { get; }
-
 		public LoginViewModel(IConfiguration configuration,
 							  IShikimoriApi shikimoriApi,
 							  IImageCache imageCache)
@@ -52,11 +39,25 @@ namespace YO.Internals.ViewModels
 				.SubscribeDiscard(OnNullUser);
 			this.WhenPropertyChanged(t => t.UserInfo)
 				.WhereNotNullValues()
-				.SubscribeAsync(OnUserInfoChanged);
+				.Subscribe(OnUserInfoChanged);
 
 			ShikimoriUsername = _configuration.ShikimoriUsername;
 			Confirm = ReactiveCommand.Create(ConfirmImpl);
 		}
+		
+		[Reactive]
+		public string? ShikimoriUsername { get; set; }
+
+		[Reactive]
+		public User? UserInfo { get; private set; }
+
+		[Reactive]
+		public Bitmap? UserPicture { get; private set; }
+
+		[Reactive]
+		public bool IsAuthorized { get; private set; }
+		
+		public ReactiveCommand<Unit, Unit> Confirm { get; }
 
 		private void ConfirmImpl()
 		{
@@ -68,10 +69,10 @@ namespace YO.Internals.ViewModels
 			UserInfo = await _shikimoriApi.Users.GetByNickname(userName);
 		}
 
-		private async Task OnUserInfoChanged(User userInfo)
+		private void OnUserInfoChanged(User userInfo)
 		{
 			IsAuthorized = true;
-			UserPicture = await _imageCache.TryGetUserPicture(userInfo);
+			UserPicture = _imageCache.TryGetUserPicture(userInfo);
 		}
 
 		private void OnNullUser()

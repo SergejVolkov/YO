@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using YO.Internals.Shikimori;
 using YO.Internals.Shikimori.Data;
@@ -29,13 +28,13 @@ namespace YO.Internals.Cache
 			}
 		}
 
-		public Task<Bitmap> TryGetAnimePoster(AnimeInfo anime) 
+		public Bitmap TryGetAnimePoster(AnimeInfo anime) 
 			=> TryGetPicture(anime.Id, ShikimoriApi.ShikimoriUrl + anime.Images[ImageType.Original]);
 
-		public Task<Bitmap> TryGetUserPicture(User user) 
+		public Bitmap TryGetUserPicture(User user) 
 			=> TryGetPicture(user.Id, user.Avatar);
 
-		private async Task<Bitmap> TryGetPicture(long id, string webUrl)
+		private Bitmap TryGetPicture(long id, string webUrl)
 		{
 			if (_posters.TryGetValue(id, out var poster))
 			{
@@ -48,7 +47,7 @@ namespace YO.Internals.Cache
 				poster = LoadFromDisk(filePath);
 			} else
 			{
-				poster = await LoadFromWeb(webUrl);
+				poster = LoadFromWeb(webUrl);
 				poster.Save(filePath);
 			}
 
@@ -57,10 +56,10 @@ namespace YO.Internals.Cache
 			return poster;
 		}
 
-		private async Task<Bitmap> LoadFromWeb(string url)
+		private Bitmap LoadFromWeb(string url)
 		{
-			var bytes = await _webClient.DownloadDataTaskAsync(url);
-			await using var ms = new MemoryStream(bytes);
+			var bytes = _webClient.DownloadData(url);
+			using var ms = new MemoryStream(bytes);
 			return new Bitmap(ms);
 		}
 

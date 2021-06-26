@@ -81,7 +81,7 @@
                           VerticalScrollBarVisibility="Auto"
                           IsVisible="{Binding !IsLoading}"
                           Margin="15">
-                <ItemsControl Items="{Binding Animes}">
+                <ItemsControl Items="{Binding ScheduleViewModel.Titles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -136,7 +136,7 @@
             </Grid>
 
             <Grid RowDefinitions="Auto, Auto"
-                  IsVisible="{Binding IsLoading}"
+                  IsVisible="{Binding ScheduleViewModel.IsLoading}"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center">
                 <TextBlock Text="🤟"

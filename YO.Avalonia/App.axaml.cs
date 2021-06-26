@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using YO.Avalonia.Views;
 using YO.Internals.Cache;
 using YO.Internals.Configuration;
+using YO.Internals.Factories;
 using YO.Internals.Shikimori;
 using YO.Internals.ViewModels;
 
@@ -50,8 +51,11 @@ namespace YO.Avalonia
 			services.AddSingleton<IShikimoriApi, ShikimoriApi>();
 			services.AddSingleton<IImageCache, ImageCache>();
 
+			services.AddSingleton<AnimeViewModelFactory>();
+
 			services.AddSingleton<MainWindowViewModel>();
 			services.AddSingleton<LoginViewModel>();
+			services.AddSingleton<ScheduleViewModel>();
 			
 			return services.BuildServiceProvider();
 		}
