@@ -16,6 +16,6 @@ namespace YO.Internals.Shikimori.Categories
 			=> new(GetAsync<AnimeInfo>, $"/{id}");
 		
 		public GetAnimesFluentRequest GetAnimes()
-			=> new GetAnimesFluentRequest(GetAsync<IReadOnlyCollection<AnimeInfo>>, string.Empty);
+			=> new (GetAsync<IReadOnlyCollection<AnimeInfo>>, string.Empty);
 	}
 }

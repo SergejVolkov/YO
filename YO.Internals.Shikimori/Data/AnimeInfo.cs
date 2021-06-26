@@ -21,7 +21,7 @@ namespace YO.Internals.Shikimori.Data
 		[JsonProperty("episodes_aired")]
 		public int AiredEpisodes { get; set; }
 
-		[JsonProperty("updated_at")]
+		[JsonProperty("next_episode_at")]
 		public DateTime? NextEpisodeTime { get; set; }
 	}
 }

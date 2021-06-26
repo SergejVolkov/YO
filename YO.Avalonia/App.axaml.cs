@@ -9,6 +9,7 @@ using YO.Avalonia.Views;
 using YO.Internals.Cache;
 using YO.Internals.Configuration;
 using YO.Internals.Factories;
+using YO.Internals.Schedule;
 using YO.Internals.Shikimori;
 using YO.Internals.ViewModels;
 
@@ -50,6 +51,7 @@ namespace YO.Avalonia
 			services.AddSingleton(provider => provider.GetRequiredService<IConfigurationManager>().Configuration);
 			services.AddSingleton<IShikimoriApi, ShikimoriApi>();
 			services.AddSingleton<IImageCache, ImageCache>();
+			services.AddSingleton<ShikimoriScheduler>();
 
 			services.AddSingleton<AnimeViewModelFactory>();
 

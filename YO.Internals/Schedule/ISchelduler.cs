@@ -7,8 +7,6 @@ namespace YO.Internals.Schedule
 	public interface IScheduler
 	{
 		IReadOnlyCollection<ScheduledEpisode> ScheduledEntries { get; }
-		Task ScheduleAnime(AnimeInfo anime);
-		Task ScheduleAnime(UserRate rate);
-		void UpdateSchedule();
+		void ScheduleAnime(AnimeInfo anime, int watchedEpisodes);
 	}
 }

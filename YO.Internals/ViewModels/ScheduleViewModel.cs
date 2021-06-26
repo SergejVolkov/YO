@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicData.Binding;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using YO.Internals.Extensions;
 using YO.Internals.Factories;
+using YO.Internals.Schedule;
 using YO.Internals.Shikimori;
 using YO.Internals.Shikimori.Data;
 
@@ -17,14 +17,17 @@ namespace YO.Internals.ViewModels
 		private readonly LoginViewModel _loginViewModel;
 		private readonly AnimeViewModelFactory _animeViewModelFactory;
 		private readonly IShikimoriApi _shikimoriApi;
+		private readonly ShikimoriScheduler _scheduler;
 
 		public ScheduleViewModel(LoginViewModel loginViewModel,
 								 AnimeViewModelFactory animeViewModelFactory,
-								 IShikimoriApi shikimoriApi)
+								 IShikimoriApi shikimoriApi,
+								 ShikimoriScheduler scheduler)
 		{
 			_loginViewModel = loginViewModel;
 			_animeViewModelFactory = animeViewModelFactory;
 			_shikimoriApi = shikimoriApi;
+			_scheduler = scheduler;
 
 			_loginViewModel.WhenPropertyChanged(vm => vm.UserInfo)
 						   .WhereNullValues()
@@ -36,7 +39,7 @@ namespace YO.Internals.ViewModels
 		}
 		
 		[Reactive]
-		public IList<AnimeViewModel>? Titles { get; private set; }
+		public IList<ScheduledEpisodeViewModel>? Titles { get; private set; }
 		
 		[Reactive]
 		public bool IsLoading { get; private set; }
@@ -49,6 +52,7 @@ namespace YO.Internals.ViewModels
 			}
 
 			IsLoading = true;
+			_scheduler.Clear();
 			
 			var animeRates = await _shikimoriApi.UserRates
 												.GetUserRates()
@@ -70,9 +74,30 @@ namespace YO.Internals.ViewModels
 			{
 				throw new Exception("Error while loading titles...");
 			}
+			
+			// workaround for https://shikimori.one/comments/7432725
+			var allTitles = titles.Where(a => a.Status != AnimeStatus.Ongoing)
+								  .ToList();
+			foreach (var ongoing in titles.Where(a => a.Status == AnimeStatus.Ongoing))
+			{
+				var ongoingInfo = await _shikimoriApi.Animes.GetAnime(ongoing.Id);
 
-			Titles = titles.Select(_animeViewModelFactory.Create)
-						   .ToList();
+				if (ongoingInfo is null)
+				{
+					throw new Exception("Error while ongoings loading");
+				}
+				
+				allTitles.Add(ongoingInfo);
+			}
+
+			foreach (var anime in allTitles)
+			{
+				_scheduler.ScheduleAnime(anime, animeRates.Single(r => r.TargetId == anime.Id));
+			}
+			
+			_scheduler.UpdateSchedule();
+
+			Titles = _scheduler.ScheduledEntries.Select(_animeViewModelFactory.Create).ToList();
 
 			IsLoading = false;
 		}

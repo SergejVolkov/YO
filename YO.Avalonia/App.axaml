@@ -15,6 +15,7 @@
             <system:Double x:Key="FontLarge">42</system:Double>
             <system:Double x:Key="FontMedium">22</system:Double>
             <system:Double x:Key="FontSmall">16</system:Double>
+            <system:Double x:Key="FontVerySmall">8</system:Double>
         </ResourceDictionary>
     </Application.Resources>
 

@@ -8,6 +8,7 @@ namespace YO.Internals.Shikimori.Categories
 {
 	public abstract class BaseCategory
 	{
+		private const int RequestsPerSecond = 5;
 		private readonly HttpClient _httpClient;
 		private readonly string _baseUrl;
 
@@ -19,6 +20,8 @@ namespace YO.Internals.Shikimori.Categories
 
 		protected async Task<TResult?> GetAsync<TResult>(string requestPath, ParametersBase parameters)
 		{
+			await Task.Delay(1000 / RequestsPerSecond);
+			
 			var fullPath = parameters.BuildQuery(_baseUrl + requestPath);
 			var httpRequest = new HttpRequestMessage(HttpMethod.Get, fullPath);
 			var httpResponse = await _httpClient.SendAsync(httpRequest);

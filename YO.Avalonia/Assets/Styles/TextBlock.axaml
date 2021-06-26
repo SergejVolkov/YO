@@ -15,6 +15,9 @@
                 
                 <TextBlock Text="123"
                            Classes="small" />
+                
+                <TextBlock Text="123"
+                           Classes="verySmall" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -55,6 +58,12 @@
     <Style Selector="TextBlock.small">
         <Style.Setters>
             <Setter Property="FontSize" Value="{StaticResource FontSmall}" />
+        </Style.Setters>
+    </Style>
+    
+    <Style Selector="TextBlock.verySmall">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontVerySmall}" />
         </Style.Setters>
     </Style>
 </Styles>
