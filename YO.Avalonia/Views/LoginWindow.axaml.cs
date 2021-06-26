@@ -1,8 +1,8 @@
-using System;
 using Avalonia;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
+using YO.Internals.Extensions;
 using YO.Internals.ViewModels;
 
 namespace YO.Avalonia.Views
@@ -16,7 +16,7 @@ namespace YO.Avalonia.Views
 			this.AttachDevTools();
 		#endif
 			
-			this.WhenActivated(d => d(ViewModel!.Confirm.Subscribe(Close)));
+			this.WhenActivated(d => d(ViewModel!.Confirm.SubscribeDiscard(Close)));
 		}
 
 		private void InitializeComponent()

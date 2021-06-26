@@ -51,8 +51,7 @@
                     <MenuItem Header="Правообладателям" />
                 </MenuItem>
             </Menu>
-
-
+            
             <Button Grid.Column="1"
                     Background="Transparent"
                     VerticalAlignment="Stretch"
@@ -66,17 +65,16 @@
                             Width="25"
                             Height="25"
                             ClipToBounds="True">
-                        <Image Source="{Binding UserPicture}"/>
+                        <Image Source="{Binding LoginViewModel.UserPicture}"/>
                     </Border>
                     
-                    <TextBlock Text="{Binding UserName}"
+                    <TextBlock Text="{Binding LoginViewModel.ShikimoriUsername}"
                                Margin="5 0"
                                VerticalAlignment="Center"
                                Grid.Column="1"/>
                 </Grid>
             </Button>
         </Grid>
-
 
         <Grid>
             <ScrollViewer HorizontalScrollBarVisibility="Disabled"
@@ -120,7 +118,7 @@
             </ScrollViewer>
 
             <Grid RowDefinitions="Auto, Auto, Auto"
-                  IsVisible="{Binding !IsAuthorized}"
+                  IsVisible="{Binding !LoginViewModel.IsAuthorized}"
                   Classes="centered">
                 <TextBlock Text="😢"
                            Grid.Row="0"

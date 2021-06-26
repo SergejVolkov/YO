@@ -1,4 +1,4 @@
-using System;
+using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Markup.Xaml;
@@ -25,15 +25,15 @@ namespace YO.Avalonia.Views
 			AvaloniaXamlLoader.Load(this);
 		}
 		
-		private async Task ShowLoginDialogAsync(InteractionContext<LoginViewModel, string> interaction)
+		private async Task ShowLoginDialogAsync(InteractionContext<LoginViewModel, Unit> interaction)
 		{
 			var dialog = new LoginWindow
 			{
 				ViewModel = interaction.Input
 			};
 
-			var result = await dialog.ShowDialog<string>(this);
-			interaction.SetOutput(result);
+			await dialog.ShowDialog(this);
+			interaction.SetOutput(Unit.Default);
 		}
 	}
 }

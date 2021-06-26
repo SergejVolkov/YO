@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using YO.Internals.Cache;
@@ -14,7 +13,6 @@ using YO.Internals.Configuration;
 using YO.Internals.Extensions;
 using YO.Internals.Shikimori;
 using YO.Internals.Shikimori.Data;
-using YO.Internals.Shikimori.Parameters;
 
 namespace YO.Internals.ViewModels
 {
@@ -24,76 +22,70 @@ namespace YO.Internals.ViewModels
 		private readonly IShikimoriApi _shikimoriApi;
 		private readonly IImageCache _imageCache;
 
-		public Interaction<LoginViewModel, string> ShowLoginDialog { get; }
+		public Interaction<LoginViewModel, Unit> ShowLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> OpenLoginDialog { get; }
 		public ReactiveCommand<Unit, Unit> RefreshList { get; }
-
-		[Reactive]
-		public bool IsAuthorized { get; set; }
 
 		[Reactive]
 		public bool IsLoading { get; set; }
 
 		[Reactive]
 		public IEnumerable<AnimeViewModel>? Animes { get; set; }
-		
-		[Reactive]
-		public string? UserName { get; set; }
-		
-		[Reactive]
-		public Bitmap? UserPicture { get; set; }
 
-		public MainWindowViewModel(IConfiguration configuration,
-								   IShikimoriApi shikimoriApi, IImageCache imageCache)
+		public LoginViewModel LoginViewModel { get; }
+
+		public MainWindowViewModel(LoginViewModel loginViewModel,
+								   IConfiguration configuration,
+								   IShikimoriApi shikimoriApi,
+								   IImageCache imageCache)
 		{
+			LoginViewModel = loginViewModel;
 			_configuration = configuration;
 			_shikimoriApi = shikimoriApi;
 			_imageCache = imageCache;
 
-			_configuration.WhenAnyValue(c => c.ShikimoriUsername)
-						  .Subscribe(async newName => await OnUserNameChanged(newName));
-			
-			ShowLoginDialog = new Interaction<LoginViewModel, string>();
-			
+			LoginViewModel.WhenPropertyChanged(vm => vm.UserInfo)
+						  .WhereNullValues()
+						  .SubscribeDiscard(OnNullUser);
+			LoginViewModel.WhenPropertyChanged(vm => vm.UserInfo)
+						  .WhereNotNullValues()
+						  .SubscribeAsyncDiscard(OnUserChanged);
+
+			ShowLoginDialog = new Interaction<LoginViewModel, Unit>();
+
 			OpenLoginDialog = ReactiveCommand.CreateFromTask(OpenLoginDialogImpl);
 			RefreshList = ReactiveCommand.CreateFromTask(UpdateAnimeList);
 		}
 
 		private async Task OpenLoginDialogImpl()
 		{
-			var loginViewModel = new LoginViewModel(_configuration.ShikimoriUsername);
-			_configuration.ShikimoriUsername = await ShowLoginDialog.Handle(loginViewModel);
+			await ShowLoginDialog.Handle(LoginViewModel);
 		}
 
-		private async Task OnUserNameChanged(string? newName)
+		private void OnNullUser()
 		{
-			IsAuthorized = !string.IsNullOrEmpty(newName);
-			UserName = IsAuthorized ? newName : "Ошибка авторизации...";
+			Animes = null;
+			IsLoading = false;
+		}
 
-			if (IsAuthorized)
-			{
-				await UpdateAnimeList();
-			} else
-			{
-				UserPicture = null;
-				Animes = null;
-			}
+		private async Task OnUserChanged()
+		{
+			await UpdateAnimeList();
 		}
 
 		private async Task UpdateAnimeList()
 		{
 			Animes = null;
 
-			if (!IsAuthorized)
+			if (!LoginViewModel.IsAuthorized)
 			{
 				return;
 			}
-			
+
 			IsLoading = true;
 
 			var user = await _shikimoriApi.Users
 										  .GetByNickname(_configuration.ShikimoriUsername);
-			UserPicture = await _imageCache.TryGetUserPicture(user);
 			var animeRates = await _shikimoriApi.UserRates
 												.GetUserRates()
 												.WithUserId(user.Id)
