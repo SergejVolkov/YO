@@ -39,7 +39,7 @@ namespace YO.Internals.ViewModels
 		}
 		
 		[Reactive]
-		public IList<ScheduledEpisodeViewModel>? Titles { get; private set; }
+		public IDictionary<DateTime,  List<ScheduledEpisodeViewModel>>? Titles { get; private set; }
 		
 		[Reactive]
 		public bool IsLoading { get; private set; }
@@ -97,7 +97,19 @@ namespace YO.Internals.ViewModels
 			
 			_scheduler.UpdateSchedule();
 
-			Titles = _scheduler.ScheduledEntries.Select(_animeViewModelFactory.Create).ToList();
+			var episodes = new Dictionary<DateTime, List<ScheduledEpisodeViewModel>>();
+
+			foreach (var scheduledEpisode in _scheduler.ScheduledEntries)
+			{
+				if (!episodes.ContainsKey(scheduledEpisode.ScheduledTime))
+				{
+					episodes[scheduledEpisode.ScheduledTime] = new List<ScheduledEpisodeViewModel>();
+				}
+				
+				episodes[scheduledEpisode.ScheduledTime].Add(_animeViewModelFactory.Create(scheduledEpisode));
+			}
+
+			Titles = episodes;
 
 			IsLoading = false;
 		}

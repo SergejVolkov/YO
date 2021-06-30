@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="YO.Avalonia.Views.ScheduledEpisodeItem">
+    <Grid RowDefinitions="*, Auto"
+          Width="200"
+          Height="250"
+          Margin="15">
+        <Image Source="{Binding Poster}"
+               Stretch="Fill"
+               Grid.Row="0"
+               Grid.RowSpan="2" />
+
+        <Grid Grid.Row="1"
+              Height="60"
+              VerticalAlignment="Bottom"
+              Background="#96969696">
+            <TextBlock Text="{Binding Name}"
+                       Classes="centered small"
+                       MaxLines="2"
+                       Foreground="White"
+                       TextWrapping="WrapWithOverflow"
+                       TextTrimming="CharacterEllipsis"
+                       Margin="5" />
+        </Grid>
+    </Grid>
+</UserControl>
