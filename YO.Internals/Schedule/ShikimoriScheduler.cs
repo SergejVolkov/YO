@@ -79,6 +79,9 @@ namespace YO.Internals.Schedule
 					scheduledEpisode.ScheduledTime = scheduledEpisode.ScheduledTime.AddDays(1);
 				}
 			}
+
+			var lastDay = DateTime.Today.AddDays(_configuration.DaysLimit);
+			_entries.RemoveAll( e => e.ScheduledTime == lastDay);
 		}
 
 		public void Clear()
