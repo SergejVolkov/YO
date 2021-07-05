@@ -1,0 +1,69 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+            <StackPanel>
+                <TextBlock Text="123"
+                           Classes="extraLarge" />
+                
+                <TextBlock Text="123"
+                           Classes="large" />
+                
+                <TextBlock Text="123"
+                           Classes="medium" />
+                
+                <TextBlock Text="123"
+                           Classes="small" />
+                
+                <TextBlock Text="123"
+                           Classes="verySmall" />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Add Styles Here -->
+    <Style Selector="TextBlock">
+        <Style.Setters>
+            <Setter Property="FontFamily" Value="Exo 2" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="TextBlock.centered">
+        <Style.Setters>
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="TextBlock.extraLarge">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontExtraLarge}" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="TextBlock.large">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontLarge}" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="TextBlock.medium">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="TextBlock.small">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontSmall}" />
+        </Style.Setters>
+    </Style>
+    
+    <Style Selector="TextBlock.verySmall">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontVerySmall}" />
+        </Style.Setters>
+    </Style>
+</Styles>

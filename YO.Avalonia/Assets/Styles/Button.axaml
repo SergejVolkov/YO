@@ -1,0 +1,22 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <!-- Add Styles Here -->
+    <Style Selector="Button.centered">
+        <Style.Setters>
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style.Setters>
+    </Style>
+
+    <Style Selector="Button.medium">
+        <Style.Setters>
+            <Setter Property="FontSize" Value="{StaticResource FontMedium}" />
+        </Style.Setters>
+    </Style>
+</Styles>

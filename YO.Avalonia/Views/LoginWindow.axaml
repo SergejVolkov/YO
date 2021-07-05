@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" 
+        d:DesignWidth="950" d:DesignHeight="250"
+        Width="950" Height="250"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        x:Class="YO.Avalonia.Views.LoginWindow"
+        Title="YO: Авторизация">
+    
+    <Grid RowDefinitions="Auto, Auto, Auto"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center">
+
+        <Grid ColumnDefinitions="Auto, Auto, Auto"
+              Grid.Row="0"
+              Margin="10,5">
+
+            <TextBlock Text="Your Personal Ongoings"
+                       Grid.Column="0"
+                       Classes="centered large"
+                       FontWeight="Bold"/>
+
+            <TextBlock Text="x"
+                       Grid.Column="1"
+                       Classes="centered"
+                       Margin="10,5"
+                       FontSize="26"
+                       FontWeight="Bold" />
+
+            <Image VerticalAlignment="Center"
+                   Height="50"
+                   Stretch="Fill"
+                   Grid.Column="2"
+                   Source="../Assets/Images/shiki_logo.png" />
+        </Grid>
+
+        <TextBlock Text="Пожалуйста, введите имя вашего аккаунта на Шикимори:"
+                   Grid.Row="1"
+                   Classes="centered medium"
+                   Margin="10,5" />
+
+        <Grid ColumnDefinitions="*, 10, Auto"
+              Grid.Row="2"
+              Margin="10,5">
+
+            <TextBox Grid.Column="0"
+                     Watermark="Наберите имя здесь..."
+                     Text="{Binding ShikimoriUsername}"
+                     TextWrapping="NoWrap"
+                     Classes="medium"
+                     AcceptsReturn="False" />
+
+            <Button Content="Ok"
+                    Grid.Column="2"
+                    Classes="medium"
+                    Command="{Binding Confirm}" />
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Assets\Fonts\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.3" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <AvaloniaResource Include="Assets\Images\shiki_logo.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\YO.Internals\YO.Internals.csproj" />
+    </ItemGroup>
+</Project>
